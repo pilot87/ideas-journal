@@ -6,16 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  UseFilters,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateAuthDto } from './dto/update-auth.dto'
+import { AllExceptionsFilter } from './duplicate.filter'
 
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @UseFilters(new AllExceptionsFilter())
   async register(@Body() createAuthDto: CreateUserDto) {
     return this.authService.register(createAuthDto)
   }
