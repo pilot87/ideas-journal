@@ -4,12 +4,22 @@ import {
   ArgumentsHost,
 } from '@nestjs/common'
 
-@Catch()
-export class AllExceptionsFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+export class DuplicateException {
+  detail: string
+  constructor(msg: string) {
+    this.detail = msg
+  }
+}
+@Catch(DuplicateException)
+export class DuplicateFilter implements ExceptionFilter {
+  catch(exception: DuplicateException, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse()
 
-    response.status(409).json(exception['detail'])
+    response.status(400).json({
+      statusCode: 400,
+      message: exception.detail,
+      error: 'Bad Request',
+    })
   }
 }
