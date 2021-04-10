@@ -1,0 +1,5 @@
+{
+  "connection_string": "postgres://db:qwer1234S@kernelexplorer.site:5432/ideas",
+  "port": 5000,
+  "jwtSecret": "2a12YNKGnQv4Q8H8FtZ1pTdtWuduvZnWFlo1VMj2jpGyiLpZR5nOTCbS"
+}
