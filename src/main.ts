@@ -13,7 +13,6 @@ export const db = pgp(config.get('connection_string'))
 async function bootstrap() {
   await init_db(db)
   const app = await NestFactory.create(AppModule)
-  app.useGlobalPipes(new ValidationPipe())
   await app.listen(3000)
 }
 

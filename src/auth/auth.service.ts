@@ -45,6 +45,11 @@ export class AuthService {
     return { message: 'Logged in', token: token }
   }
 
+  async clean() {
+    await User.clean()
+    return { message: 'Test users removed' }
+  }
+
   findAll() {
     return `This action returns all auth`
   }
