@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateAuthDto } from './dto/update-auth.dto'
+import { LoginDto } from './dto/login.dto'
 import { DuplicateFilter } from './duplicate.filter'
 
 @Controller('api/auth')
@@ -19,8 +19,14 @@ export class AuthController {
 
   @Post('register')
   @UseFilters(new DuplicateFilter())
-  async register(@Body() createAuthDto: CreateUserDto) {
+  register(@Body() createAuthDto: CreateUserDto) {
     return this.authService.register(createAuthDto)
+  }
+
+  @Post('login')
+  @UseFilters(new DuplicateFilter())
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto)
   }
 
   @Get()
@@ -34,7 +40,7 @@ export class AuthController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  update(@Param('id') id: string, @Body() updateAuthDto: LoginDto) {
     return this.authService.update(+id, updateAuthDto)
   }
 

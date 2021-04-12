@@ -1,8 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-} from '@nestjs/common'
+import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common'
 
 export class DuplicateException {
   detail: string
@@ -21,5 +17,11 @@ export class DuplicateFilter implements ExceptionFilter {
       message: exception.detail,
       error: 'Bad Request',
     })
+
+    // return {
+    //   statusCode: 400,
+    //   message: exception.detail,
+    //   error: 'Bad Request',
+    // }
   }
 }

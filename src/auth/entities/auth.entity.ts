@@ -1,11 +1,8 @@
 import { DuplicateException } from '../duplicate.filter'
 
-const config = require('config')
-const pgp = require('pg-promise')({})
-
 import { CreateUserDto } from '../dto/create-user.dto'
 
-const db = pgp(config.get('connection_string'))
+import { db } from '../../main'
 
 export class User {
   static async add(createUserDto: CreateUserDto) {
@@ -18,6 +15,26 @@ export class User {
           password: createUserDto.password,
           email: createUserDto.email,
         },
+      )
+      .catch((e) => {
+        throw new DuplicateException(e['detail'])
+      })
+  }
+  static async findOneByName(name: string) {
+    return (
+      await db.any('SELECT * FROM users WHERE username = ${name}', {
+        name: name,
+      })
+    )[0]
+  }
+}
+
+export class Session {
+  static async add(sessionID: string, username: string) {
+    return await db
+      .any(
+        'INSERT INTO sessions (sessionID, username) VALUES (${sessionID}, ${username});',
+        { sessionID: sessionID, username: username },
       )
       .catch((e) => {
         throw new DuplicateException(e['detail'])
