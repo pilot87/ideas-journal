@@ -8,21 +8,23 @@ import { Observable } from 'rxjs'
 const jwt = require('jsonwebtoken')
 const config = require('config')
 
-// insert user header with true authorise username or empty if guest
+import { Session } from './auth/entities/auth.entity'
+
+// update last session activity time, should be used
+// only when handle user activity, not auto quarry handle
 @Injectable()
-export class UserInterceptor implements NestInterceptor {
+export class ActivityInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('User')
+    console.log('Activity')
     try {
       const token = context
         .switchToHttp()
         .getRequest()
         .headers.authorization.split(' ')[1]
-      const { username } = jwt.verify(token, config.get('jwtSecret'))
-      context.switchToHttp().getRequest().headers.user = username
-    } catch (e) {
-      context.switchToHttp().getRequest().headers.user = ''
+      const { session } = jwt.verify(token, config.get('jwtSecret'))
+      Session.active(session)
+    } finally {
+      return next.handle()
     }
-    return next.handle()
   }
 }

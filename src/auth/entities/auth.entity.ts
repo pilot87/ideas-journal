@@ -82,4 +82,10 @@ export class Session {
       return false
     }
   }
+  static active(sessionID: string) {
+    db.none(
+      'UPDATE sessions SET last_activity = CURRENT_TIMESTAMP WHERE sessionID = ${sessionID};',
+      { sessionID: sessionID },
+    )
+  }
 }

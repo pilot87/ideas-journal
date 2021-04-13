@@ -15,9 +15,11 @@ import { LoginDto } from './dto/login.dto'
 import { DuplicateFilter } from './duplicate.filter'
 import { AuthGuard } from '../auth.guard'
 import { UserInterceptor } from '../user.interceptor'
+import { ActivityInterceptor } from '../activity.interceptor'
 
 @Controller('api/auth')
 @UsePipes(new ValidationPipe())
+@UseInterceptors(UserInterceptor)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -35,7 +37,7 @@ export class AuthController {
 
   @Get('cleanTestsUsers')
   @UseGuards(AuthGuard)
-  @UseInterceptors(UserInterceptor)
+  @UseInterceptors(ActivityInterceptor)
   clean() {
     return this.authService.clean()
   }
