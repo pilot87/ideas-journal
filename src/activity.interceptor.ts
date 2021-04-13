@@ -15,7 +15,6 @@ import { Session } from './auth/entities/auth.entity'
 @Injectable()
 export class ActivityInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('Activity')
     try {
       const token = context
         .switchToHttp()

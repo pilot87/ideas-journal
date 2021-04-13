@@ -62,6 +62,7 @@ describe('Auth module', () => {
 
   it('should not register the same user', async () => {
     const username = gen_username(10)
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -71,6 +72,7 @@ describe('Auth module', () => {
         test: true,
       })
       .expect(201)
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -85,6 +87,7 @@ describe('Auth module', () => {
   it('should register new user and log in', async () => {
     const username = gen_username(10)
     const password = gen_password()
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -111,6 +114,7 @@ describe('Auth module', () => {
     const password0 = gen_password()
     const username1 = gen_username(10)
     const password1 = gen_password()
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -120,6 +124,7 @@ describe('Auth module', () => {
         test: true,
       })
       .expect(201, { message: 'User registered' })
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -129,16 +134,19 @@ describe('Auth module', () => {
         test: true,
       })
       .expect(201, { message: 'User registered' })
+
     const res = await request(app.getHttpServer())
       .post('/api/auth/login')
       .send({
         username: username1,
         password: password1,
       })
+
     await request(app.getHttpServer())
       .get('/api/auth/cleanTestsUsers')
       .set({ authorization: 'Bearer ' + res.body.token })
       .expect(200, { message: 'Test users removed' })
+
     return await request(app.getHttpServer())
       .post('/api/auth/login')
       .send({
@@ -147,11 +155,13 @@ describe('Auth module', () => {
       })
       .expect(201, { status: 400, message: 'User not found', token: '' })
   })
+
   it('should forbidden auth with wrong token', async () => {
     const username0 = gen_username(10)
     const password0 = gen_password()
     const username1 = gen_username(10)
     const password1 = gen_password()
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -161,6 +171,7 @@ describe('Auth module', () => {
         test: true,
       })
       .expect(201, { message: 'User registered' })
+
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -170,17 +181,20 @@ describe('Auth module', () => {
         test: true,
       })
       .expect(201, { message: 'User registered' })
+
     const res = await request(app.getHttpServer())
       .post('/api/auth/login')
       .send({
         username: username1,
         password: password1,
       })
+
     const res1 = await request(app.getHttpServer())
       .get('/api/auth/cleanTestsUsers')
       .set({ authorization: 'Bearer ' + res.body.token + '0' })
     expect(res1.status).toBe(403)
     expect(res1.body.message).toEqual('Forbidden resource')
+
     await request(app.getHttpServer())
       .get('/api/auth/cleanTestsUsers')
       .set({ authorization: 'Bearer ' + res.body.token })
@@ -189,7 +203,8 @@ describe('Auth module', () => {
 })
 
 describe('Idea module', () => {
-  let app: INestApplication, db
+  let app: INestApplication
+
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
@@ -198,28 +213,89 @@ describe('Idea module', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile()
-
     app = moduleFixture.createNestApplication()
     await app.init()
   })
+
   it('should create idea', async () => {
-    const username = gen_username(5)
-    const password = gen_password()
+    const customer = gen_username(5)
+    const password0 = gen_password()
+
     await request(app.getHttpServer()).post('/api/auth/register').send({
-      username: username,
+      username: customer,
       email: gen_email(),
-      password: password,
+      password: password0,
       test: true,
     })
+
     const token = (
       await request(app.getHttpServer()).post('/api/auth/login').send({
-        username: username,
-        password: password,
+        username: customer,
+        password: password0,
       })
     ).body.token
+
     const res = await request(app.getHttpServer())
       .post('/api/idea/new')
       .set({ authorization: 'Bearer ' + token })
+      .send({
+        name: gen_username(5),
+        describtion: 'Some describtion',
+        link:
+          'https://www.figma.com/file/DfKkzBDEzeK3fcTKmpHJSw/Travel-App-Concept?node-id=0%3A1',
+      })
     expect(res.status).toBe(201)
+    expect(res.body.message).toEqual('Idea created')
+  })
+
+  it('should get list of ideas', async () => {
+    const freelancer = gen_username(5)
+    const password0 = gen_password()
+    const customer = gen_username(5)
+    const password1 = gen_password()
+    const link =
+      'https://www.figma.com/file/DfKkzBDEzeK3fcTKmpHJSw/Travel-App-Concept?node-id=0%3A1'
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const token1 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const res1 = await request(app.getHttpServer())
+      .post('/api/idea/new')
+      .set({ authorization: 'Bearer ' + token1 })
+      .send({
+        name: gen_username(5),
+        describtion: 'Some describtion',
+        link: link,
+      })
+
+    const res0 = await request(app.getHttpServer())
+      .get('/api/idea/list')
+      .set({ authorization: 'Bearer ' + token0 })
+    expect(res0.status).toBe(200)
+    expect(res0.body.message).toEqual('List')
+    expect(res0.body.list).toBeDefined()
+    expect(typeof res0.body.list).toBe('array')
+    expect(typeof res0.body.list[0]).toBe('object')
+    expect(res0.body.list[0].author).toEqual(customer)
+    expect(res0.body.list[0].describtion).toEqual('Some describtion')
+    expect(res0.body.list[0].link).toEqual(link)
   })
 })

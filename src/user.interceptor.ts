@@ -12,7 +12,6 @@ const config = require('config')
 @Injectable()
 export class UserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('User')
     try {
       const token = context
         .switchToHttp()
