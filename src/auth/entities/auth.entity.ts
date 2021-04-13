@@ -63,4 +63,23 @@ export class Session {
         throw new DuplicateException(e['detail'])
       })
   }
+  static async duration(sessionID: string) {
+    if (
+      (
+        await db.any(
+          'SELECT last_activity FROM sessions WHERE sessionID = ${sessionID}',
+          { sessionID: sessionID },
+        )
+      )[0]
+    ) {
+      return (
+        await db.one(
+          "SELECT (CURRENT_TIMESTAMP - (SELECT last_activity FROM sessions WHERE sessionID = ${sessionID})) < INTERVAL '3 hours';",
+          { sessionID: sessionID },
+        )
+      )['?column?']
+    } else {
+      return false
+    }
+  }
 }
