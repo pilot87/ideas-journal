@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 const cryptoRandomString = require('crypto-random-string')
 const jwt = require('jsonwebtoken')
-
 const bcrypt = require('bcryptjs')
 const config = require('config')
 
@@ -43,11 +42,6 @@ export class AuthService {
     )
 
     return { message: 'Logged in', token: token }
-  }
-
-  async clean() {
-    await User.clean()
-    return { message: 'Test users removed' }
   }
 
   findAll() {

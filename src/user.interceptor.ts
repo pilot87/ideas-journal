@@ -5,6 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common'
 import { Observable } from 'rxjs'
+import { Session } from './auth/entities/auth.entity';
 const jwt = require('jsonwebtoken')
 const config = require('config')
 
@@ -17,8 +18,12 @@ export class UserInterceptor implements NestInterceptor {
         .switchToHttp()
         .getRequest()
         .headers.authorization.split(' ')[1]
-      const { username } = jwt.verify(token, config.get('jwtSecret'))
-      context.switchToHttp().getRequest().headers.user = username
+      const { username, session } = jwt.verify(token, config.get('jwtSecret'))
+      if (Session.duration(session)) {
+        context.switchToHttp().getRequest().headers.user = username
+      } else {
+        context.switchToHttp().getRequest().headers.user = ''
+      }
     } catch (e) {
       context.switchToHttp().getRequest().headers.user = ''
     }

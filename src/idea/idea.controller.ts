@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { IdeaService } from './idea.service';
-import { CreateIdeaDto } from './dto/create-idea.dto';
-import { UpdateIdeaDto } from './dto/update-idea.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Req, UsePipes, ValidationPipe, UseInterceptors, UseGuards, UseFilters,
+} from '@nestjs/common';
+import { Request } from 'express'
+import { IdeaService } from './idea.service'
+import { CreateIdeaDto } from './dto/create-idea.dto'
+import { UpdateIdeaDto } from './dto/update-idea.dto'
+import { UserInterceptor } from '../user.interceptor'
+import { AuthGuard } from '../auth.guard'
+import { DuplicateFilter } from '../duplicate.filter'
 
-@Controller('idea')
+@Controller('api/idea')
+@UsePipes(new ValidationPipe())
+@UseGuards(AuthGuard)
+@UseFilters(new DuplicateFilter())
+@UseInterceptors(UserInterceptor)
 export class IdeaController {
   constructor(private readonly ideaService: IdeaService) {}
 
-  @Post()
-  create(@Body() createIdeaDto: CreateIdeaDto) {
-    return this.ideaService.create(createIdeaDto);
+  @Post('create')
+  create(@Body() createIdeaDto: CreateIdeaDto, @Req() req: Request) {
+    return this.ideaService.create(createIdeaDto, <string>req.headers.user)
   }
 
-  @Get()
-  findAll() {
-    return this.ideaService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ideaService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateIdeaDto: UpdateIdeaDto) {
-    return this.ideaService.update(+id, updateIdeaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ideaService.remove(+id);
+  @Get('listall')
+  listall() {
+    return this.ideaService.listall()
   }
 }

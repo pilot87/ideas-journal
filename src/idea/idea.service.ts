@@ -1,26 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { CreateIdeaDto } from './dto/create-idea.dto';
-import { UpdateIdeaDto } from './dto/update-idea.dto';
+import { Injectable } from '@nestjs/common'
+import { CreateIdeaDto } from './dto/create-idea.dto'
+import { Ideas } from './entities/idea.entity'
 
 @Injectable()
 export class IdeaService {
-  create(createIdeaDto: CreateIdeaDto) {
-    return 'This action adds a new idea';
+  async create(createIdeaDto: CreateIdeaDto, author: string) {
+    createIdeaDto.tags = createIdeaDto.tags.filter(
+      (v, i, a) => a.indexOf(v) === i,
+    )
+    await Ideas.add(createIdeaDto, author)
+    return { message: 'Idea created' }
   }
 
-  findAll() {
-    return `This action returns all idea`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} idea`;
-  }
-
-  update(id: number, updateIdeaDto: UpdateIdeaDto) {
-    return `This action updates a #${id} idea`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} idea`;
+  async listall() {
+    return Ideas.listall()
   }
 }

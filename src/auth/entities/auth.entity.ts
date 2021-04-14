@@ -1,11 +1,11 @@
-import { DuplicateException } from '../duplicate.filter'
+import { DuplicateException } from '../../duplicate.filter'
 
 import { CreateUserDto } from '../dto/create-user.dto'
 
 import { db } from '../../main'
 
 export class User {
-  static add(createUserDto: CreateUserDto) {
+  static async add(createUserDto: CreateUserDto) {
     if (createUserDto.test) {
       return db
         .any(
@@ -44,16 +44,10 @@ export class User {
       })
     )[0]
   }
-  static clean() {
-    return db.any(
-      'DELETE FROM sessions WHERE username IN (SELECT username FROM users WHERE test = TRUE);' +
-        'DELETE FROM users WHERE test = TRUE;',
-    )
-  }
 }
 
 export class Session {
-  static add(sessionID: string, username: string) {
+  static async add(sessionID: string, username: string) {
     return db
       .any(
         'INSERT INTO sessions (sessionID, username) VALUES (${sessionID}, ${username});',
@@ -82,7 +76,7 @@ export class Session {
       return false
     }
   }
-  static active(sessionID: string) {
+  static async active(sessionID: string) {
     db.none(
       'UPDATE sessions SET last_activity = CURRENT_TIMESTAMP WHERE sessionID = ${sessionID};',
       { sessionID: sessionID },
