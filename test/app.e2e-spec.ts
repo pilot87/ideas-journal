@@ -499,6 +499,7 @@ describe('Announcement module', () => {
         ideaname: ideaname,
         anname: anname,
         text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
       })
     expect(res.status).toBe(201)
     expect(res.body.message).toEqual('Announcement created')

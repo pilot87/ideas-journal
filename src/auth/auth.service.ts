@@ -6,7 +6,8 @@ const config = require('config')
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { LoginDto } from './dto/login.dto'
-import { Session, User } from './entities/auth.entity'
+import { User } from './entities/user.entity'
+import { Session } from './entities/session.entity'
 
 @Injectable()
 export class AuthService {

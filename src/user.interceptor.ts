@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common'
 import { Observable } from 'rxjs'
-import { Session } from './auth/entities/auth.entity';
+import { Session } from './auth/entities/session.entity';
 const jwt = require('jsonwebtoken')
 const config = require('config')
 

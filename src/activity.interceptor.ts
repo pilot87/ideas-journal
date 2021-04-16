@@ -8,7 +8,7 @@ import { Observable } from 'rxjs'
 const jwt = require('jsonwebtoken')
 const config = require('config')
 
-import { Session } from './auth/entities/auth.entity'
+import { Session } from './auth/entities/session.entity';
 
 // update last session activity time, should be used
 // only when handle user activity, not auto quarry handle
