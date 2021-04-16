@@ -140,7 +140,7 @@ describe('Auth module', () => {
       })
 
     const res1 = await request(app.getHttpServer())
-      .get('/api/idea/list')
+      .get('/api/idea/listall')
       .set({ authorization: 'Bearer ' + res.body.token + '0' })
     expect(res1.status).toBe(403)
     expect(res1.body.message).toEqual('Forbidden resource')
@@ -232,56 +232,275 @@ describe('Idea module', () => {
     expect(res.body.message).toEqual('Idea created')
   })
 
-  // it('should get list of ideas', async () => {
-  //   await request(app.getHttpServer()).post('/api/auth/register').send({
-  //     username: freelancer,
-  //     email: gen_email(),
-  //     password: password0,
-  //     test: true,
-  //   })
-  //
-  //   await request(app.getHttpServer()).post('/api/auth/register').send({
-  //     username: customer,
-  //     email: gen_email(),
-  //     password: password1,
-  //     test: true,
-  //   })
-  //
-  //   const token0 = (
-  //     await request(app.getHttpServer()).post('/api/auth/login').send({
-  //       username: freelancer,
-  //       password: password0,
-  //     })
-  //   ).body.token
-  //
-  //   const token1 = (
-  //     await request(app.getHttpServer()).post('/api/auth/login').send({
-  //       username: customer,
-  //       password: password1,
-  //     })
-  //   ).body.token
-  //
-  //   await request(app.getHttpServer())
-  //     .post('/api/idea/create')
-  //     .set({ authorization: 'Bearer ' + token1 })
-  //     .send({
-  //       ideaname: ideaname,
-  //       describtion: 'Some describtion',
-  //       short_desc: 'Some short describtion',
-  //       link: link,
-  //       tags: ['Tag0', 'Tag1'],
-  //     })
-  //
-  //   const res0 = await request(app.getHttpServer())
-  //     .get('/api/idea/list')
-  //     .set({ authorization: 'Bearer ' + token0 })
-  //   expect(res0.status).toBe(200)
-  //   expect(res0.body.message).toEqual('List')
-  //   expect(res0.body.list).toBeDefined()
-  //   expect(typeof res0.body.list).toBe('array')
-  //   expect(typeof res0.body.list[0]).toBe('object')
-  //   expect(res0.body.list[0].author).toEqual(customer)
-  //   expect(res0.body.list[0].short_desc).toEqual('Some short describtion')
-  //   expect(res0.body.list[0].link).toEqual(link)
-  // })
+  it('should get list of ideas', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: customer,
+      email: gen_email(),
+      password: password1,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const token1 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: customer,
+        password: password1,
+      })
+    ).body.token
+
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + token1 })
+      .send({
+        ideaname: ideaname,
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1'],
+      })
+
+    const res0 = await request(app.getHttpServer())
+      .get('/api/idea/listall')
+      .set({ authorization: 'Bearer ' + token0 })
+    expect(res0.status).toBe(200)
+    expect(res0.body.message).toEqual('List')
+    expect(res0.body.list).toBeDefined()
+    const record = res0.body.list.find((e) => e.author === customer)
+    expect(record.author).toEqual(customer)
+    expect(record.short_desc).toEqual('Some short describtion')
+    expect(record.tags).toEqual(['Tag0', 'Tag1'])
+  })
+
+  it('should get list of ideas created by customer', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: customer,
+      email: gen_email(),
+      password: password1,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const token1 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: customer,
+        password: password1,
+      })
+    ).body.token
+
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + token1 })
+      .send({
+        ideaname: ideaname,
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + token1 })
+      .send({
+        ideaname: ideaname + 'a',
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1'],
+      })
+
+    const res0 = await request(app.getHttpServer())
+      .get('/api/idea/listbyuser/' + customer)
+      .set({ authorization: 'Bearer ' + token0 })
+    expect(res0.status).toBe(200)
+    expect(res0.body.message).toEqual('List')
+    expect(res0.body.list).toBeDefined()
+    expect(res0.body.list.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('should return idea', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: customer,
+      email: gen_email(),
+      password: password1,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const token1 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: customer,
+        password: password1,
+      })
+    ).body.token
+
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + token1 })
+      .send({
+        ideaname: ideaname,
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1', 'Tag2'],
+      })
+
+    const res = await request(app.getHttpServer())
+      .get('/api/idea/getByName/' + ideaname)
+      .set({ authorization: 'Bearer ' + token0 })
+    expect(res.status).toBe(200)
+    expect(res.body.message).toEqual('Idea')
+    expect(res.body.idea.author).toEqual(customer)
+    expect(res.body.idea.short_desc).toEqual('Some short describtion')
+    expect(res.body.idea.tags).toEqual(['Tag0', 'Tag1', 'Tag2'])
+  })
+
+  it('should create and return comment', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: customer,
+      email: gen_email(),
+      password: password1,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const token1 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: customer,
+        password: password1,
+      })
+    ).body.token
+
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + token1 })
+      .send({
+        ideaname: ideaname,
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1', 'Tag2'],
+      })
+
+    const res = await request(app.getHttpServer())
+      .post('/api/idea/newcomment')
+      .set({ authorization: 'Bearer ' + token0 })
+      .send({ idea: ideaname, text: 'Some comment' })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toEqual('Comment created')
+
+    const res0 = await request(app.getHttpServer())
+      .get('/api/idea/getByName/' + ideaname)
+      .set({ authorization: 'Bearer ' + token0 })
+    expect(res0.status).toBe(200)
+    expect(res0.body.message).toEqual('Idea')
+    expect(res0.body.idea.author).toEqual(customer)
+    expect(res0.body.idea.short_desc).toEqual('Some short describtion')
+    expect(res0.body.idea.tags).toEqual(['Tag0', 'Tag1', 'Tag2'])
+    expect(res0.body.idea.comments).toEqual([
+      { text: 'Some comment', author: freelancer },
+    ])
+  })
+})
+
+describe('Announcement module', () => {
+  let app, customer, freelancer, password0, anname
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile()
+    app = moduleFixture.createNestApplication()
+    await app.init()
+    customer = gen_username(5)
+    freelancer = gen_username(5)
+    password0 = gen_password()
+    anname = gen_username(5)
+  })
+
+  it('should create announcement', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const ideaslist = (
+      await request(app.getHttpServer())
+        .get('/api/idea/listall')
+        .set({ authorization: 'Bearer ' + token0 })
+    ).body.list.map((idea) => idea.idea)
+
+    const ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
+
+    const res = await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + token0 })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        text: 'Announcement text',
+      })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toEqual('Announcement created')
+  })
 })

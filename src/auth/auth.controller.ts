@@ -1,19 +1,16 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   UseFilters,
   UsePipes,
   ValidationPipe,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { LoginDto } from './dto/login.dto'
 import { DuplicateFilter } from '../duplicate.filter'
-import { AuthGuard } from '../auth.guard'
 import { UserInterceptor } from '../user.interceptor'
 import { ActivityInterceptor } from '../activity.interceptor'
 
@@ -25,12 +22,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() createAuthDto: CreateUserDto) {
-    return this.authService.register(createAuthDto)
+  async register(@Body() createAuthDto: CreateUserDto) {
+    return await this.authService.register(createAuthDto)
   }
 
   @Post('login')
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto)
+  @UseInterceptors(ActivityInterceptor)
+  async login(@Body() loginDto: LoginDto) {
+    return await this.authService.login(loginDto)
   }
 }

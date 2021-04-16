@@ -1,10 +1,4 @@
-import {
-  ArrayUnique,
-  IsArray,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator'
+import { IsArray, IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateIdeaDto {
   @IsString()

@@ -7,7 +7,7 @@ import { db } from '../../main'
 export class User {
   static async add(createUserDto: CreateUserDto) {
     if (createUserDto.test) {
-      return db
+      return await db
         .any(
           'INSERT INTO users (username, password, email, test) VALUES ' +
             '(${username}, ${password}, ${email}, ${test});',
@@ -22,7 +22,7 @@ export class User {
           throw new DuplicateException(e['detail'])
         })
     } else {
-      return db
+      return await db
         .any(
           'INSERT INTO users (username, password, email) VALUES ' +
             '(${username}, ${password}, ${email});',
@@ -48,7 +48,7 @@ export class User {
 
 export class Session {
   static async add(sessionID: string, username: string) {
-    return db
+    return await db
       .any(
         'INSERT INTO sessions (sessionID, username) VALUES (${sessionID}, ${username});',
         { sessionID: sessionID, username: username },
@@ -77,7 +77,7 @@ export class Session {
     }
   }
   static async active(sessionID: string) {
-    db.none(
+    await db.none(
       'UPDATE sessions SET last_activity = CURRENT_TIMESTAMP WHERE sessionID = ${sessionID};',
       { sessionID: sessionID },
     )
