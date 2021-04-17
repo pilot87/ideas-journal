@@ -498,10 +498,119 @@ describe('Announcement module', () => {
       .send({
         ideaname: ideaname,
         anname: anname,
+        short_desc: 'Short desc',
         text: 'Announcement text',
         tags: ['Tag2', 'Tag3'],
       })
     expect(res.status).toBe(201)
     expect(res.body.message).toEqual('Announcement created')
+  })
+
+  it('should create comment', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const ideaslist = (
+      await request(app.getHttpServer())
+        .get('/api/idea/listall')
+        .set({ authorization: 'Bearer ' + token0 })
+    ).body.list.map((idea) => idea.idea)
+
+    const ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + token0 })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
+      })
+
+    const res = await request(app.getHttpServer())
+      .post('/api/announcement/createcomment')
+      .set({ authorization: 'Bearer ' + token0 })
+      .send({
+        anname: anname,
+        text: 'Comment text',
+      })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toEqual('Comment created')
+  })
+
+  it('should list announcements', async () => {
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    const token0 = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    const ideaslist = (
+      await request(app.getHttpServer())
+        .get('/api/idea/listall')
+        .set({ authorization: 'Bearer ' + token0 })
+    ).body.list.map((idea) => idea.idea)
+
+    const ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + token0 })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3', 'Tag4'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/createcomment')
+      .set({ authorization: 'Bearer ' + token0 })
+      .send({
+        anname: anname,
+        text: 'Original comment text',
+      })
+
+    const res = await request(app.getHttpServer())
+      .get('/api/announcement/list/' + ideaname)
+      .set({ authorization: 'Bearer ' + token0 })
+    expect(res.status).toBe(200)
+    expect(res.body.message).toEqual('List')
+    expect(res.body.list.find((a) => a.anname === anname)).toEqual({
+      username: freelancer,
+      ideaname: ideaname,
+      anname: anname,
+      short_desc: 'Short desc',
+      text: 'Announcement text',
+      tags: ['Tag2', 'Tag3', 'Tag4'],
+      comments: [
+        {
+          text: 'Original comment text',
+          author: freelancer,
+        },
+      ],
+    })
   })
 })

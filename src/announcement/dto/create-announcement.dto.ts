@@ -9,6 +9,9 @@ export class CreateAnnouncementDto {
   anname: string
   @IsString()
   @IsNotEmpty()
+  short_desc: string
+  @IsString()
+  @IsNotEmpty()
   text: string
   @IsArray()
   @IsString({ each: true })

@@ -3,24 +3,22 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UsePipes,
   ValidationPipe,
   UseGuards,
   UseFilters,
   UseInterceptors,
   Req,
+  Param,
 } from '@nestjs/common'
 import { AnnouncementService } from './announcement.service'
 import { CreateAnnouncementDto } from './dto/create-announcement.dto'
-import { UpdateAnnouncementDto } from './dto/update-announcement.dto'
 import { AuthGuard } from '../auth.guard'
 import { DuplicateFilter } from '../duplicate.filter'
 import { UserInterceptor } from '../user.interceptor'
 import { ActivityInterceptor } from '../activity.interceptor'
 import { Request } from 'express'
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Controller('api/announcement')
 @UsePipes(new ValidationPipe())
@@ -38,6 +36,21 @@ export class AnnouncementController {
   ) {
     return await this.announcementService.create(
       createAnnouncementDto,
+      <string>req.headers.user,
+    )
+  }
+  @Get('list/:idea')
+  async list(@Param('idea') idea: string) {
+    return await this.announcementService.list(idea)
+  }
+
+  @Post('createcomment')
+  async createcomment(
+    @Body() createCommentDto: CreateCommentDto,
+    @Req() req: Request,
+  ) {
+    return await this.announcementService.createcomment(
+      createCommentDto,
       <string>req.headers.user,
     )
   }
