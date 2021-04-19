@@ -20,7 +20,9 @@ export class IdeaService {
       message: 'List',
       list: ideas.map((i) => ({
         ...i,
-        tags: tags.filter((t) => t.ideaname === i.ideaname).map((t) => t.tagname),
+        tags: tags
+          .filter((t) => t.ideaname === i.ideaname)
+          .map((t) => t.tagname),
       })),
     }
   }
@@ -36,6 +38,7 @@ export class IdeaService {
         idea: first.i,
         author: first.author,
         short_desc: first.short_desc,
+        status: first.status,
         tags: tags,
       }
     })

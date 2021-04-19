@@ -186,8 +186,6 @@ describe('Idea module', () => {
       })
     ).body.token
 
-    // console.log(token)
-
     const res = await request(app.getHttpServer())
       .post('/api/idea/create')
       .set({ Authorization: 'Bearer ' + token })
@@ -227,7 +225,6 @@ describe('Idea module', () => {
         tags: ['Tag0', 'Tag0'],
         link: link,
       })
-    // console.log(res.body.message)
     expect(res.status).toBe(201)
     expect(res.body.message).toEqual('Idea created')
   })
@@ -282,6 +279,7 @@ describe('Idea module', () => {
     expect(record.author).toEqual(customer)
     expect(record.short_desc).toEqual('Some short describtion')
     expect(record.tags).toEqual(['Tag0', 'Tag1'])
+    expect(record.status).toEqual('new')
   })
 
   it('should get list of ideas created by customer', async () => {
@@ -342,6 +340,7 @@ describe('Idea module', () => {
     expect(res0.body.message).toEqual('List')
     expect(res0.body.list).toBeDefined()
     expect(res0.body.list.length).toBeGreaterThanOrEqual(2)
+    expect(res0.body.list[0].status).toEqual('new')
   })
 
   it('should return idea', async () => {
@@ -392,6 +391,7 @@ describe('Idea module', () => {
     expect(res.body.idea.author).toEqual(customer)
     expect(res.body.idea.short_desc).toEqual('Some short describtion')
     expect(res.body.idea.tags).toEqual(['Tag0', 'Tag1', 'Tag2'])
+    expect(res.body.idea.status).toEqual('new')
   })
 
   it('should create and return comment', async () => {
@@ -465,7 +465,8 @@ describe('Announcement module', () => {
     tokenf,
     tokenc,
     ideaslist,
-    ideaname
+    ideaname,
+    link
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -502,8 +503,8 @@ describe('Announcement module', () => {
 
     tokenc = (
       await request(app.getHttpServer()).post('/api/auth/login').send({
-        username: freelancer,
-        password: password0,
+        username: customer,
+        password: password1,
       })
     ).body.token
 
@@ -514,6 +515,9 @@ describe('Announcement module', () => {
     ).body.list.map((idea) => idea.ideaname)
 
     ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
+
+    link =
+      'https://www.figma.com/file/DfKkzBDEzeK3fcTKmpHJSw/Travel-App-Concept?node-id=0%3A1'
   })
 
   it('should create announcement', async () => {
@@ -555,6 +559,7 @@ describe('Announcement module', () => {
   })
 
   it('should list announcements', async () => {
+
     await request(app.getHttpServer())
       .post('/api/announcement/create')
       .set({ authorization: 'Bearer ' + tokenf })
@@ -568,7 +573,7 @@ describe('Announcement module', () => {
 
     await request(app.getHttpServer())
       .post('/api/announcement/createcomment')
-      .set({ authorization: 'Bearer ' + tokenf })
+      .set({ authorization: 'Bearer ' + tokenc })
       .send({
         anname: anname,
         text: 'Original comment text',
@@ -581,23 +586,102 @@ describe('Announcement module', () => {
     expect(res.body.message).toEqual('List')
     expect(res.body.list.find((a) => a.anname === anname)).toEqual({
       username: freelancer,
-      ideaname: ideaname,
       anname: anname,
       short_desc: 'Short desc',
-      text: 'Announcement text',
       tags: ['Tag2', 'Tag3', 'Tag4'],
       comments: [
         {
           text: 'Original comment text',
-          author: freelancer,
+          author: customer,
         },
       ],
+      status: 'new',
     })
   })
-  // it('should choose announcement and mode toggle idea to await status', async () => {
-  //   await request(app.getHttpServer())
-  //     .post('/api/announcement/choose')
-  //     .set({ authorization: 'Bearer ' + tokenc })
-  //     .send({ isea})
-  // })
+
+  it('should return announcement by name', async () => {
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + tokenf })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/createcomment')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({ anname: anname, text: 'Some comment' })
+    const res = await request(app.getHttpServer())
+      .get('/api/announcement/getbyname/' + anname)
+      .set({ authorization: 'Bearer ' + tokenf })
+    expect(res.status).toBe(200)
+    expect(res.body.message).toBe('Announcement')
+    expect(res.body.an).toEqual({
+      ideaname: ideaname,
+      username: freelancer,
+      anname: anname,
+      short_desc: 'Short desc',
+      text: 'Announcement text',
+      status: 'new',
+      tags: ['Tag2', 'Tag3'],
+      comments: ['Some comment'],
+    })
+  })
+
+  it('should choose announcement and mode toggle idea to await status', async () => {
+    ideaname = gen_username(10)
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({
+        ideaname: ideaname,
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + tokenf })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
+      })
+
+    const res0 = await request(app.getHttpServer())
+      .post('/api/announcement/choose')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({ ideaname: ideaname, anname: anname })
+    expect(res0.status).toBe(201)
+    expect(res0.body.message).toEqual('Announcement choosed')
+
+    const res1 = await request(app.getHttpServer())
+      .get('/api/idea/listall')
+      .set({ authorization: 'Bearer ' + tokenc })
+    expect(res1.status).toBe(200)
+    expect(res1.body.list.find((i) => i.ideaname === ideaname).status).toEqual(
+      'await',
+    )
+
+    const res2 = await request(app.getHttpServer())
+      .get('/api/announcement/list/' + ideaname)
+      .set({ authorization: 'Bearer ' + tokenc })
+    expect(res2.status).toBe(200)
+    expect(res2.body.list.find((a) => a.anname === anname).status).toEqual(
+      'chosen',
+    )
+    const res3 = await request(app.getHttpServer())
+      .get('/api/announcement/getbyname/' + anname)
+      .set({ authorization: 'Bearer ' + tokenc })
+    expect(res3.status).toBe(200)
+    expect(res3.body.an.status).toEqual('chosen')
+  })
 })

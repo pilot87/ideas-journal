@@ -18,7 +18,8 @@ import { DuplicateFilter } from '../duplicate.filter'
 import { UserInterceptor } from '../user.interceptor'
 import { ActivityInterceptor } from '../activity.interceptor'
 import { Request } from 'express'
-import { CreateCommentDto } from './dto/create-comment.dto';
+import { ChooseAnnouncementDto } from './dto/choose-announcement.dto'
+import { CreateCommentDto } from './dto/create-comment.dto'
 
 @Controller('api/announcement')
 @UsePipes(new ValidationPipe())
@@ -51,6 +52,22 @@ export class AnnouncementController {
   ) {
     return await this.announcementService.createcomment(
       createCommentDto,
+      <string>req.headers.user,
+    )
+  }
+
+  @Get('getbyname/:anname')
+  async getbyname(@Param('anname') anname: string) {
+    return await this.announcementService.getbyname(anname)
+  }
+
+  @Post('choose')
+  async choose(
+    @Body() chooseAnnouncementDto: ChooseAnnouncementDto,
+    @Req() req: Request,
+  ) {
+    return await this.announcementService.choose(
+      chooseAnnouncementDto,
       <string>req.headers.user,
     )
   }

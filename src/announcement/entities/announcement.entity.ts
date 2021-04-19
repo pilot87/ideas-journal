@@ -2,6 +2,7 @@ import { CreateAnnouncementDto } from '../dto/create-announcement.dto'
 import { db } from '../../main'
 import { DuplicateException } from '../../duplicate.filter'
 import { CreateCommentDto } from '../dto/create-comment.dto'
+import { ChooseAnnouncementDto } from '../dto/choose-announcement.dto';
 
 export class Announcement {
   // create new announcement
@@ -47,6 +48,15 @@ export class Announcement {
     )
   }
 
+  // all comments for all announcement for announcement
+  static async listanc(anname: string) {
+    return await db.any(
+      'SELECT anname, commenttext, c.username FROM announcement a JOIN ancomments ' +
+        'c USING (anname) WHERE anname = ${anname};',
+      { anname: anname },
+    )
+  }
+
   // all tags for all announcement for idea
   static async listt(idea: string) {
     return await db.any(
@@ -56,12 +66,29 @@ export class Announcement {
     )
   }
 
+  // all tags for all announcement for announcement
+  static async listant(anname: string) {
+    return await db.any(
+      'SELECT anname, tagname FROM announcement NATURAL JOIN antags ' +
+        'WHERE anname = ${anname};',
+      { anname: anname },
+    )
+  }
+
   // all announcement for idea
   static async list(idea: string) {
     return await db.any(
-      'SELECT * FROM announcement WHERE ideaname = ${ideaname};',
+      'SELECT username, anname, short_desc, status FROM announcement WHERE ideaname = ${ideaname};',
       { ideaname: idea },
     )
+  }
+
+  static async getbyname(anname: string) {
+    return (
+      await db.any('SELECT * FROM announcement WHERE anname = ${anname};', {
+        anname: anname,
+      })
+    )[0]
   }
 
   // create new comment
@@ -82,5 +109,16 @@ export class Announcement {
       .catch((e) => {
         throw new DuplicateException(e['detail'])
       })
+  }
+
+  static async choose(chooseAnnouncementDto: ChooseAnnouncementDto) {
+    return await db.any(
+      "UPDATE announcement SET status = 'chosen' WHERE anname = ${anname};" +
+        "UPDATE ideas SET status = 'await' WHERE ideaname = ${ideaname};",
+      {
+        anname: chooseAnnouncementDto.anname,
+        ideaname: chooseAnnouncementDto.ideaname,
+      },
+    )
   }
 }

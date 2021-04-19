@@ -37,7 +37,8 @@ export class Ideas {
   // return all ideas
   static async list() {
     return await db.any(
-      'SELECT ideaname, username author, short_desc FROM ideas ORDER BY author, ideaname',
+      'SELECT ideaname, username author, short_desc, status FROM ' +
+        'ideas ORDER BY author, ideaname',
     )
   }
 
@@ -50,19 +51,19 @@ export class Ideas {
 
   static async listbyuser(name: string) {
     return await db.any(
-      'SELECT ideaname i, username author, short_desc, tagname FROM ideas ' +
+      'SELECT ideaname i, username author, short_desc, tagname, status FROM ideas ' +
         'NATURAL LEFT OUTER JOIN ideastags NATURAL JOIN tags WHERE username = ${username} ' +
         'ORDER BY author, i;',
       { username: name },
     )
   }
 
-  static async getByName(idea: string) {
+  static async getByName(ideaname: string) {
     return await db.any(
-      'SELECT ideaname i, username author, short_desc, tagname, describtion, "link" FROM ' +
-        'ideas NATURAL LEFT OUTER JOIN ideastags NATURAL JOIN tags WHERE ideaname = ${idea} ' +
+      'SELECT ideaname i, username author, short_desc, tagname, describtion, "link", status FROM ' +
+        'ideas NATURAL LEFT OUTER JOIN ideastags NATURAL LEFT JOIN tags WHERE ideaname = ${ideaname} ' +
         'ORDER BY i;',
-      { idea: idea },
+      { ideaname: ideaname },
     )
   }
   static async getIdeaComments(idea: string) {
