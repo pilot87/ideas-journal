@@ -33,10 +33,18 @@ export class Ideas {
 
     return true
   }
-  static async listall() {
+
+  // return all ideas
+  static async list() {
     return await db.any(
-      'SELECT ideaname i, username author, short_desc, tagname FROM ideas ' +
-        'NATURAL LEFT OUTER JOIN ideastags NATURAL JOIN tags ORDER BY author, i;',
+      'SELECT ideaname, username author, short_desc FROM ideas ORDER BY author, ideaname',
+    )
+  }
+
+  // return tags (tags table used for future columns)
+  static async listt() {
+    return await db.any(
+      'SELECT ideaname, tagname FROM ideas NATURAL JOIN ideastags NATURAL JOIN tags',
     )
   }
 
@@ -70,7 +78,7 @@ export class Ideas {
       'INSERT INTO comments (ideaname, commenttext, username) VALUES ' +
         '(${ideaname}, ${commenttext}, ${username});',
       {
-        ideaname: createCommentDto.idea,
+        ideaname: createCommentDto.ideaname,
         commenttext: createCommentDto.text,
         username: author,
       },

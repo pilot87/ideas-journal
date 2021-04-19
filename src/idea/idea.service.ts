@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { CreateIdeaDto } from './dto/create-idea.dto'
 import { Ideas } from './entities/idea.entity'
-import { CreateCommentDto } from './dto/create-comment.dto';
+import { CreateCommentDto } from './dto/create-comment.dto'
 
 @Injectable()
 export class IdeaService {
@@ -14,21 +14,18 @@ export class IdeaService {
   }
 
   async listall() {
-    const ilist = await Ideas.listall()
-    const result = [...new Set(ilist.map((idea) => idea.i))].map((iname) => {
-      const first = ilist.find((el) => el.i === iname)
-      const tags = ilist.filter((el) => el.i === iname).map((el) => el.tagname)
-      tags.sort()
-      return {
-        idea: first.i,
-        author: first.author,
-        short_desc: first.short_desc,
-        tags: tags,
-      }
-    })
-    return { message: 'List', list: result }
+    const ideas = await Ideas.list()
+    const tags = await Ideas.listt()
+    return {
+      message: 'List',
+      list: ideas.map((i) => ({
+        ...i,
+        tags: tags.filter((t) => t.ideaname === i.ideaname).map((t) => t.tagname),
+      })),
+    }
   }
 
+  // complex code here for not implement complex SQL for rare quarry
   async listbyuser(name: string) {
     const ilist = await Ideas.listbyuser(name)
     const result = [...new Set(ilist.map((idea) => idea.i))].map((iname) => {

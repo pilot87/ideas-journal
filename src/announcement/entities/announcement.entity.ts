@@ -4,6 +4,7 @@ import { DuplicateException } from '../../duplicate.filter'
 import { CreateCommentDto } from '../dto/create-comment.dto'
 
 export class Announcement {
+  // create new announcement
   static async create(
     createAnnouncementDto: CreateAnnouncementDto,
     author: string,
@@ -37,6 +38,7 @@ export class Announcement {
     return true
   }
 
+  // all comments for all announcement for idea
   static async listc(idea: string) {
     return await db.any(
       'SELECT anname, commenttext, c.username FROM announcement a JOIN ancomments ' +
@@ -45,6 +47,7 @@ export class Announcement {
     )
   }
 
+  // all tags for all announcement for idea
   static async listt(idea: string) {
     return await db.any(
       'SELECT anname, tagname FROM announcement NATURAL JOIN antags ' +
@@ -53,6 +56,7 @@ export class Announcement {
     )
   }
 
+  // all announcement for idea
   static async list(idea: string) {
     return await db.any(
       'SELECT * FROM announcement WHERE ideaname = ${ideaname};',
@@ -60,6 +64,7 @@ export class Announcement {
     )
   }
 
+  // create new comment
   static async createcomment(
     createCommentDto: CreateCommentDto,
     author: string,

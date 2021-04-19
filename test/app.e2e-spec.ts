@@ -437,7 +437,7 @@ describe('Idea module', () => {
     const res = await request(app.getHttpServer())
       .post('/api/idea/newcomment')
       .set({ authorization: 'Bearer ' + token0 })
-      .send({ idea: ideaname, text: 'Some comment' })
+      .send({ ideaname: ideaname, text: 'Some comment' })
     expect(res.status).toBe(201)
     expect(res.body.message).toEqual('Comment created')
 
@@ -456,7 +456,17 @@ describe('Idea module', () => {
 })
 
 describe('Announcement module', () => {
-  let app, customer, freelancer, password0, anname
+  let app,
+    customer,
+    freelancer,
+    password0,
+    password1,
+    anname,
+    tokenf,
+    tokenc,
+    ideaslist,
+    ideaname
+
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -466,10 +476,9 @@ describe('Announcement module', () => {
     customer = gen_username(5)
     freelancer = gen_username(5)
     password0 = gen_password()
+    password1 = gen_password()
     anname = gen_username(5)
-  })
 
-  it('should create announcement', async () => {
     await request(app.getHttpServer()).post('/api/auth/register').send({
       username: freelancer,
       email: gen_email(),
@@ -477,24 +486,40 @@ describe('Announcement module', () => {
       test: true,
     })
 
-    const token0 = (
+    tokenf = (
       await request(app.getHttpServer()).post('/api/auth/login').send({
         username: freelancer,
         password: password0,
       })
     ).body.token
 
-    const ideaslist = (
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: customer,
+      email: gen_email(),
+      password: password1,
+      test: true,
+    })
+
+    tokenc = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    ideaslist = (
       await request(app.getHttpServer())
         .get('/api/idea/listall')
-        .set({ authorization: 'Bearer ' + token0 })
-    ).body.list.map((idea) => idea.idea)
+        .set({ authorization: 'Bearer ' + tokenf })
+    ).body.list.map((idea) => idea.ideaname)
 
-    const ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
+    ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
+  })
 
+  it('should create announcement', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/announcement/create')
-      .set({ authorization: 'Bearer ' + token0 })
+      .set({ authorization: 'Bearer ' + tokenf })
       .send({
         ideaname: ideaname,
         anname: anname,
@@ -507,31 +532,9 @@ describe('Announcement module', () => {
   })
 
   it('should create comment', async () => {
-    await request(app.getHttpServer()).post('/api/auth/register').send({
-      username: freelancer,
-      email: gen_email(),
-      password: password0,
-      test: true,
-    })
-
-    const token0 = (
-      await request(app.getHttpServer()).post('/api/auth/login').send({
-        username: freelancer,
-        password: password0,
-      })
-    ).body.token
-
-    const ideaslist = (
-      await request(app.getHttpServer())
-        .get('/api/idea/listall')
-        .set({ authorization: 'Bearer ' + token0 })
-    ).body.list.map((idea) => idea.idea)
-
-    const ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
-
     await request(app.getHttpServer())
       .post('/api/announcement/create')
-      .set({ authorization: 'Bearer ' + token0 })
+      .set({ authorization: 'Bearer ' + tokenf })
       .send({
         ideaname: ideaname,
         anname: anname,
@@ -542,7 +545,7 @@ describe('Announcement module', () => {
 
     const res = await request(app.getHttpServer())
       .post('/api/announcement/createcomment')
-      .set({ authorization: 'Bearer ' + token0 })
+      .set({ authorization: 'Bearer ' + tokenf })
       .send({
         anname: anname,
         text: 'Comment text',
@@ -552,31 +555,9 @@ describe('Announcement module', () => {
   })
 
   it('should list announcements', async () => {
-    await request(app.getHttpServer()).post('/api/auth/register').send({
-      username: freelancer,
-      email: gen_email(),
-      password: password0,
-      test: true,
-    })
-
-    const token0 = (
-      await request(app.getHttpServer()).post('/api/auth/login').send({
-        username: freelancer,
-        password: password0,
-      })
-    ).body.token
-
-    const ideaslist = (
-      await request(app.getHttpServer())
-        .get('/api/idea/listall')
-        .set({ authorization: 'Bearer ' + token0 })
-    ).body.list.map((idea) => idea.idea)
-
-    const ideaname = ideaslist[Math.floor(Math.random() * ideaslist.length)]
-
     await request(app.getHttpServer())
       .post('/api/announcement/create')
-      .set({ authorization: 'Bearer ' + token0 })
+      .set({ authorization: 'Bearer ' + tokenf })
       .send({
         ideaname: ideaname,
         anname: anname,
@@ -587,7 +568,7 @@ describe('Announcement module', () => {
 
     await request(app.getHttpServer())
       .post('/api/announcement/createcomment')
-      .set({ authorization: 'Bearer ' + token0 })
+      .set({ authorization: 'Bearer ' + tokenf })
       .send({
         anname: anname,
         text: 'Original comment text',
@@ -595,7 +576,7 @@ describe('Announcement module', () => {
 
     const res = await request(app.getHttpServer())
       .get('/api/announcement/list/' + ideaname)
-      .set({ authorization: 'Bearer ' + token0 })
+      .set({ authorization: 'Bearer ' + tokenf })
     expect(res.status).toBe(200)
     expect(res.body.message).toEqual('List')
     expect(res.body.list.find((a) => a.anname === anname)).toEqual({
@@ -613,4 +594,10 @@ describe('Announcement module', () => {
       ],
     })
   })
+  // it('should choose announcement and mode toggle idea to await status', async () => {
+  //   await request(app.getHttpServer())
+  //     .post('/api/announcement/choose')
+  //     .set({ authorization: 'Bearer ' + tokenc })
+  //     .send({ isea})
+  // })
 })
