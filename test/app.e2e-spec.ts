@@ -559,7 +559,6 @@ describe('Announcement module', () => {
   })
 
   it('should list announcements', async () => {
-
     await request(app.getHttpServer())
       .post('/api/announcement/create')
       .set({ authorization: 'Bearer ' + tokenf })
@@ -683,5 +682,110 @@ describe('Announcement module', () => {
       .set({ authorization: 'Bearer ' + tokenc })
     expect(res3.status).toBe(200)
     expect(res3.body.an.status).toEqual('chosen')
+  })
+})
+
+describe('Result module', () => {
+  let app,
+    customer,
+    freelancer,
+    password0,
+    password1,
+    anname,
+    tokenf,
+    tokenc,
+    ideaname,
+    link
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile()
+    app = moduleFixture.createNestApplication()
+    await app.init()
+    customer = gen_username(5)
+    freelancer = gen_username(5)
+    password0 = gen_password()
+    password1 = gen_password()
+    anname = gen_username(5)
+    ideaname = gen_username(5)
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: freelancer,
+      email: gen_email(),
+      password: password0,
+      test: true,
+    })
+
+    tokenf = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: freelancer,
+        password: password0,
+      })
+    ).body.token
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: customer,
+      email: gen_email(),
+      password: password1,
+      test: true,
+    })
+
+    tokenc = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: customer,
+        password: password1,
+      })
+    ).body.token
+
+    link =
+      'https://www.figma.com/file/DfKkzBDEzeK3fcTKmpHJSw/Travel-App-Concept?node-id=0%3A1'
+
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({
+        ideaname: ideaname,
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + tokenf })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + tokenf })
+      .send({
+        ideaname: ideaname,
+        anname: anname + 'a',
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/choose')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({ ideaname: ideaname, anname: anname })
+  })
+
+  it('should create result', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/result/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({ ideaname: ideaname, anname: anname, comment: 'Result comment' })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toBe('Result created')
   })
 })

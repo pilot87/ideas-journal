@@ -14,9 +14,7 @@ export class AnnouncementService {
 
   async list(idea: string) {
     const announcements = await Announcement.list(idea)
-    // console.log(announcements)
     const ideac = await Announcement.listc(idea)
-    // console.log(ideac)
     const ideat = await Announcement.listt(idea)
 
     return {
@@ -38,7 +36,6 @@ export class AnnouncementService {
 
   async getbyname(anname: string) {
     const an = await Announcement.getbyname(anname)
-    // console.log(an)
     return {
       message: 'Announcement',
       an: {

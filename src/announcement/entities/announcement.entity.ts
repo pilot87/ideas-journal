@@ -2,7 +2,7 @@ import { CreateAnnouncementDto } from '../dto/create-announcement.dto'
 import { db } from '../../main'
 import { DuplicateException } from '../../duplicate.filter'
 import { CreateCommentDto } from '../dto/create-comment.dto'
-import { ChooseAnnouncementDto } from '../dto/choose-announcement.dto';
+import { ChooseAnnouncementDto } from '../dto/choose-announcement.dto'
 
 export class Announcement {
   // create new announcement

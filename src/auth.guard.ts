@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
-import { Session } from './auth/entities/session.entity';
+import { Session } from './auth/entities/session.entity'
 const config = require('config')
 const jwt = require('jsonwebtoken')
 

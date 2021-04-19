@@ -61,6 +61,6 @@ export class IdeaController {
       createCommentDto,
       <string>req.headers.user,
     )
-    return { message: 'Comment created'}
+    return { message: 'Comment created' }
   }
 }
