@@ -788,4 +788,75 @@ describe('Result module', () => {
     expect(res.status).toBe(201)
     expect(res.body.message).toBe('Result created')
   })
+  it('should return No idea', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/result/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({
+        ideaname: gen_username(10),
+        anname: anname,
+        comment: 'Result comment',
+      })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toBe('No idea')
+  })
+  it('should return Permission denied', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/result/create')
+      .set({ authorization: 'Bearer ' + tokenf })
+      .send({
+        ideaname: ideaname,
+        anname: anname,
+        comment: 'Result comment',
+      })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toBe('Permission denied')
+  })
+  it('should return No announcement chosen', async () => {
+    await request(app.getHttpServer())
+      .post('/api/idea/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({
+        ideaname: ideaname + 'e',
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        link: link,
+        tags: ['Tag0', 'Tag1'],
+      })
+
+    await request(app.getHttpServer())
+      .post('/api/announcement/create')
+      .set({ authorization: 'Bearer ' + tokenf })
+      .send({
+        ideaname: ideaname + 'e',
+        anname: anname + 'e',
+        short_desc: 'Short desc',
+        text: 'Announcement text',
+        tags: ['Tag2', 'Tag3'],
+      })
+
+    const res = await request(app.getHttpServer())
+      .post('/api/result/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({
+        ideaname: ideaname + 'e',
+        anname: anname + 'e',
+        comment: 'Result comment',
+      })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toBe('No announcement chosen')
+  })
+  it('should return Idea already completed', async () => {
+    await request(app.getHttpServer())
+      .post('/api/result/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({ ideaname: ideaname, anname: anname, comment: 'Result comment' })
+
+    const res = await request(app.getHttpServer())
+      .post('/api/result/create')
+      .set({ authorization: 'Bearer ' + tokenc })
+      .send({ ideaname: ideaname, anname: anname, comment: 'Result comment' })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toBe('Idea already completed')
+  })
 })
