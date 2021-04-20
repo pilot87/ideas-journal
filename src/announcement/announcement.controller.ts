@@ -20,11 +20,13 @@ import { ActivityInterceptor } from '../activity.interceptor'
 import { Request } from 'express'
 import { ChooseAnnouncementDto } from './dto/choose-announcement.dto'
 import { CreateCommentDto } from './dto/create-comment.dto'
+import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/announcement')
 @UsePipes(new ValidationPipe())
 @UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
+@UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
 @UseInterceptors(ActivityInterceptor)
 export class AnnouncementController {

@@ -13,11 +13,13 @@ import { LoginDto } from './dto/login.dto'
 import { DuplicateFilter } from '../duplicate.filter'
 import { UserInterceptor } from '../user.interceptor'
 import { ActivityInterceptor } from '../activity.interceptor'
+import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/auth')
 @UsePipes(new ValidationPipe())
 @UseInterceptors(UserInterceptor)
 @UseFilters(new DuplicateFilter())
+@UseFilters(new NegativeFilter())
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

@@ -4,6 +4,7 @@ import { Announcement } from './entities/announcement.entity'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { ChooseAnnouncementDto } from './dto/choose-announcement.dto'
 import { Ideas } from '../idea/entities/idea.entity'
+import { NegativeException } from '../negative.filter';
 
 @Injectable()
 export class AnnouncementService {
@@ -51,20 +52,22 @@ export class AnnouncementService {
   async choose(chooseAnnouncementDto: ChooseAnnouncementDto, author: string) {
     const idea = (await Ideas.getByName(chooseAnnouncementDto.ideaname))[0]
     if (idea === undefined) {
-      return { message: 'No idea' }
+      throw new NegativeException({ message: 'No idea' })
     }
     if (idea.author !== author) {
-      return { message: 'Permission denied' }
+      throw new NegativeException({ message: 'Permission denied' })
     }
     if (!(await Announcement.getbyname(chooseAnnouncementDto.anname))) {
-      return { message: 'No announcement' }
+      throw new NegativeException({ message: 'No announcement' })
     }
     if (
       (await Announcement.list(chooseAnnouncementDto.ideaname)).find(
         (a) => a.status === 'chosen',
       )
     ) {
-      return { message: 'Another announcement already chosen' }
+      throw new NegativeException({
+        message: 'Another announcement already chosen',
+      })
     }
     await Announcement.choose(chooseAnnouncementDto)
     return { message: 'Announcement choosed' }

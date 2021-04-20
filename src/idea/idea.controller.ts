@@ -19,11 +19,13 @@ import { AuthGuard } from '../auth.guard'
 import { DuplicateFilter } from '../duplicate.filter'
 import { ActivityInterceptor } from '../activity.interceptor'
 import { CreateCommentDto } from './dto/create-comment.dto'
+import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/idea')
 @UsePipes(new ValidationPipe())
 @UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
+@UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
 @UseInterceptors(ActivityInterceptor)
 export class IdeaController {

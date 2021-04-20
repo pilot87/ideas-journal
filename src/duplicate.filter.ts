@@ -6,6 +6,7 @@ export class DuplicateException {
     this.detail = msg
   }
 }
+
 @Catch(DuplicateException)
 export class DuplicateFilter implements ExceptionFilter {
   catch(exception: DuplicateException, host: ArgumentsHost) {
@@ -13,15 +14,8 @@ export class DuplicateFilter implements ExceptionFilter {
     const response = ctx.getResponse()
 
     response.status(400).json({
-      statusCode: 400,
       message: exception.detail,
       error: 'Bad Request',
     })
-
-    // return {
-    //   statusCode: 400,
-    //   message: exception.detail,
-    //   error: 'Bad Request',
-    // }
   }
 }

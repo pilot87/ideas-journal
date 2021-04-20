@@ -786,7 +786,7 @@ describe('Result module', () => {
         anname: anname,
         comment: 'Result comment',
       })
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(400)
     expect(res.body.message).toBe('No idea')
   })
   it('should return Permission denied', async () => {
@@ -798,7 +798,7 @@ describe('Result module', () => {
         anname: anname,
         comment: 'Result comment',
       })
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(400)
     expect(res.body.message).toBe('Permission denied')
   })
   it('should return No announcement chosen', async () => {
@@ -832,7 +832,7 @@ describe('Result module', () => {
         anname: anname + 'e',
         comment: 'Result comment',
       })
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(400)
     expect(res.body.message).toBe('No announcement chosen')
   })
   it('should return Idea already completed', async () => {
@@ -845,7 +845,7 @@ describe('Result module', () => {
       .post('/api/result/create')
       .set({ authorization: 'Bearer ' + tokenc })
       .send({ ideaname: ideaname, anname: anname, comment: 'Result comment' })
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(400)
     expect(res.body.message).toBe('Idea already completed')
   })
 })

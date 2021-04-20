@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { LoginDto } from './dto/login.dto'
 import { User } from './entities/user.entity'
 import { Session } from './entities/session.entity'
+import { NegativeException } from '../negative.filter'
 
 @Injectable()
 export class AuthService {
@@ -21,12 +22,12 @@ export class AuthService {
     const user = await User.findOneByName(loginDto.username)
 
     if (!user) {
-      return { status: 400, message: 'User not found', token: '' }
+      throw new NegativeException({ message: 'User not found', token: '' })
     }
 
     const isMatch = await bcrypt.compare(loginDto.password, user.password)
     if (!isMatch) {
-      return { status: 400, message: 'Wrong password', token: '' }
+      throw new NegativeException({ message: 'Wrong password', token: '' })
     }
 
     const session = cryptoRandomString({ length: 20, type: 'base64' })

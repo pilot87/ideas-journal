@@ -16,11 +16,13 @@ import { AuthGuard } from '../auth.guard'
 import { DuplicateFilter } from '../duplicate.filter'
 import { UserInterceptor } from '../user.interceptor'
 import { ActivityInterceptor } from '../activity.interceptor'
+import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/result')
 @UsePipes(new ValidationPipe())
 @UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
+@UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
 @UseInterceptors(ActivityInterceptor)
 export class ResultController {

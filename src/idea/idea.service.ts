@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateIdeaDto } from './dto/create-idea.dto'
 import { Ideas } from './entities/idea.entity'
 import { CreateCommentDto } from './dto/create-comment.dto'
+import { NegativeException } from '../negative.filter';
 
 @Injectable()
 export class IdeaService {
@@ -48,7 +49,7 @@ export class IdeaService {
   async getByName(idea: string) {
     const ilist = await Ideas.getByName(idea)
     if (ilist.length === 0) {
-      return { message: 'No ideas found' }
+      throw new NegativeException({ message: 'No ideas found' })
     }
     const result = ilist[0]
     result.tags = ilist.map((el) => el.tagname)
