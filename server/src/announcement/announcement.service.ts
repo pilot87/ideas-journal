@@ -4,7 +4,7 @@ import { Announcement } from './entities/announcement.entity'
 import { CreateCommentDto } from './dto/create-comment.dto'
 import { ChooseAnnouncementDto } from './dto/choose-announcement.dto'
 import { Ideas } from '../idea/entities/idea.entity'
-import { NegativeException } from '../negative.filter';
+import { NegativeException } from '../negative.filter'
 
 @Injectable()
 export class AnnouncementService {

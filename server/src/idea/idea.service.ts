@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateIdeaDto } from './dto/create-idea.dto'
 import { Ideas } from './entities/idea.entity'
 import { CreateCommentDto } from './dto/create-comment.dto'
-import { NegativeException } from '../negative.filter';
+import { NegativeException } from '../negative.filter'
 
 @Injectable()
 export class IdeaService {
