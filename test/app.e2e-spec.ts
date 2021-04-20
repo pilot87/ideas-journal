@@ -4,21 +4,10 @@ import * as request from 'supertest'
 
 import { AppModule } from '../src/app.module'
 
-const gen_username = (length) => {
-  let result = ''
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
-}
-const gen_email = () =>
-  `${gen_username(Math.floor(Math.random() * 18) + 2)}@${gen_username(
-    Math.floor(Math.random() * 3) + 2,
-  )}.com`
-const gen_password = () => Math.random().toString(36).slice(-8)
+import { gen_username, gen_password, gen_email } from './e2e.lib'
+
+// solid file use because db connection could not be closed under supertest
+// and 3000 port could not be released
 
 describe('Auth module', () => {
   let app: INestApplication
