@@ -14,7 +14,7 @@ export class DuplicateFilter implements ExceptionFilter {
     const response = ctx.getResponse()
 
     response.status(400).json({
-      message: exception.detail,
+      message: [exception.detail],
       error: 'Bad Request',
     })
   }

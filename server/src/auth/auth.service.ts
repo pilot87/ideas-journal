@@ -43,6 +43,11 @@ export class AuthService {
       config.get('jwtSecret'),
     )
 
-    return { message: 'Logged in', token: token }
+    return {
+      message: 'Logged in',
+      token: token,
+      username: user.username,
+      email: user.email,
+    }
   }
 }

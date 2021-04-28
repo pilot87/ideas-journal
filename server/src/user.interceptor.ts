@@ -21,11 +21,14 @@ export class UserInterceptor implements NestInterceptor {
       const { username, session } = jwt.verify(token, config.get('jwtSecret'))
       if (Session.duration(session)) {
         context.switchToHttp().getRequest().headers.user = username
+        context.switchToHttp().getRequest().headers.session = session
       } else {
         context.switchToHttp().getRequest().headers.user = ''
+        context.switchToHttp().getRequest().headers.session = ''
       }
     } catch (e) {
       context.switchToHttp().getRequest().headers.user = ''
+      context.switchToHttp().getRequest().headers.session = ''
     }
     return next.handle()
   }

@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "cross-env NODE_ENV=development npm run start --prefix client",
+    "server:dev": "cross-env NODE_ENV=development npm run start:dev --prefix server",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run server:dev\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,8 @@
   },
   "homepage": "https://github.com/pilot87/ideas-journal#readme",
   "dependencies": {
+    "concurrently": "^6.0.2",
+    "cross-env": "^7.0.3",
     "typescript": "^4.2.4"
   }
 }

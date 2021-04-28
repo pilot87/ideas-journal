@@ -34,6 +34,20 @@ describe('Auth module', () => {
     expect(res.body).toEqual({ message: 'User registered' })
   })
 
+  it('should return error if password too short', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/auth/register')
+      .send({
+        username: gen_username(10),
+        email: gen_email(),
+        password: gen_username(5),
+        test: true,
+      })
+    expect(res.status).toBe(400)
+    expect(Array.isArray(res.body.message)).toBe(true)
+    expect(res.body.message.length).toBeGreaterThanOrEqual(1)
+  })
+
   it('should not register new user', async () => {
     return await request(app.getHttpServer())
       .post('/api/auth/register')
@@ -133,6 +147,114 @@ describe('Auth module', () => {
       .set({ authorization: 'Bearer ' + res.body.token + '0' })
     expect(res1.status).toBe(403)
     expect(res1.body.message).toEqual('Forbidden resource')
+  })
+})
+
+describe('Profile module', () => {
+  let login, password, token, app, newemail
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile()
+
+    app = moduleFixture.createNestApplication()
+    await app.init()
+
+    login = gen_username(5)
+    password = gen_password()
+    newemail = gen_email()
+
+    await request(app.getHttpServer()).post('/api/auth/register').send({
+      username: login,
+      email: gen_email(),
+      password: password,
+      test: true,
+    })
+
+    token = (
+      await request(app.getHttpServer()).post('/api/auth/login').send({
+        username: login,
+        password: password,
+      })
+    ).body.token
+  })
+
+  it('should change email', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/profile/chemail')
+      .set({ authorization: 'Bearer ' + token })
+      .send({ email: newemail })
+    expect(res.status).toBe(201)
+    expect(res.body.token).toBeDefined()
+    expect(res.body.message).toEqual('Email changed')
+    expect(typeof res.body.token).toBe('string')
+    expect(res.body.token.length).toBeGreaterThan(10)
+  })
+
+  it('should return error(s) if try to change email to invalid', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/profile/chemail')
+      .set({ authorization: 'Bearer ' + token })
+      .send({ email: gen_username(10) })
+    expect(res.status).toBe(400)
+    expect(Array.isArray(res.body.message)).toBe(true)
+    expect(res.body.message.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('should return error if try to change email to existing', async () => {
+    await request(app.getHttpServer())
+      .post('/api/auth/register')
+      .send({
+        username: gen_username(5),
+        email: newemail,
+        password: gen_password(),
+        test: true,
+      })
+
+    const res = await request(app.getHttpServer())
+      .post('/api/profile/chemail')
+      .set({ authorization: 'Bearer ' + token })
+      .send({ email: newemail })
+    expect(res.status).toBe(400)
+    expect(Array.isArray(res.body.message)).toBe(true)
+    expect(res.body.message.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('should chage email and change it again with new token', async () => {
+    const res0 = await request(app.getHttpServer())
+      .post('/api/profile/chemail')
+      .set({ authorization: 'Bearer ' + token })
+      .send({ email: newemail })
+
+    const res1 = await request(app.getHttpServer())
+      .post('/api/profile/chemail')
+      .set({ authorization: 'Bearer ' + res0.body.token })
+      .send({ email: newemail })
+    expect(res1.status).toBe(201)
+    expect(res1.body.token).toBeDefined()
+    expect(res1.body.message).toEqual('Email changed')
+    expect(typeof res1.body.token).toBe('string')
+    expect(res1.body.token.length).toBeGreaterThan(10)
+  })
+
+  it('should change password', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/profile/chpasswd')
+      .set({ authorization: 'Bearer ' + token })
+      .send({ password: gen_password() })
+    expect(res.status).toBe(201)
+    expect(res.body.message).toEqual('Password changed')
+  })
+
+  it('should return error if password too short', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/profile/chpasswd')
+      .set({ authorization: 'Bearer ' + token })
+      .send({ password: gen_username(5) })
+    expect(res.status).toBe(400)
+    expect(Array.isArray(res.body.message)).toBe(true)
+    expect(res.body.message.length).toBeGreaterThanOrEqual(1)
   })
 })
 
@@ -777,6 +899,7 @@ describe('Result module', () => {
     expect(res.status).toBe(201)
     expect(res.body.message).toBe('Result created')
   })
+
   it('should return No idea', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/result/create')
@@ -787,8 +910,9 @@ describe('Result module', () => {
         comment: 'Result comment',
       })
     expect(res.status).toBe(400)
-    expect(res.body.message).toBe('No idea')
+    expect(res.body.message).toEqual(['No idea'])
   })
+
   it('should return Permission denied', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/result/create')
@@ -799,8 +923,9 @@ describe('Result module', () => {
         comment: 'Result comment',
       })
     expect(res.status).toBe(400)
-    expect(res.body.message).toBe('Permission denied')
+    expect(res.body.message).toEqual(['Permission denied'])
   })
+
   it('should return No announcement chosen', async () => {
     await request(app.getHttpServer())
       .post('/api/idea/create')
@@ -833,8 +958,9 @@ describe('Result module', () => {
         comment: 'Result comment',
       })
     expect(res.status).toBe(400)
-    expect(res.body.message).toBe('No announcement chosen')
+    expect(res.body.message).toEqual(['No announcement chosen'])
   })
+
   it('should return Idea already completed', async () => {
     await request(app.getHttpServer())
       .post('/api/result/create')
@@ -846,6 +972,6 @@ describe('Result module', () => {
       .set({ authorization: 'Bearer ' + tokenc })
       .send({ ideaname: ideaname, anname: anname, comment: 'Result comment' })
     expect(res.status).toBe(400)
-    expect(res.body.message).toBe('Idea already completed')
+    expect(res.body.message).toEqual(['Idea already completed'])
   })
 })

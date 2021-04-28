@@ -5,6 +5,7 @@ import {
   IsAlphanumeric,
   IsBoolean,
   IsOptional,
+  MinLength,
 } from 'class-validator'
 
 export class CreateUserDto {
@@ -16,6 +17,7 @@ export class CreateUserDto {
   email: string
   @IsString()
   @IsNotEmpty()
+  @MinLength(6)
   password: string
   @IsOptional()
   @IsBoolean()

@@ -1,68 +1,56 @@
 import React, { useState } from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import ProgressBar from 'react-bootstrap/ProgressBar'
-import Button from 'react-bootstrap/Button'
-import Toast from 'react-bootstrap/Toast'
+import { observer, Observer } from 'mobx-react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 
-function App() {
-  const [showA, setShowA] = useState(true)
-  const [showB, setShowB] = useState(true)
+import { State } from './app/mobx'
+import { AddUser } from './pages/addUser'
+import { Menu } from './componenst/Menu'
+import { Login } from './pages/login'
+import { About } from './pages/about'
 
-  const toggleShowA = () => setShowA(!showA)
-  const toggleShowB = () => setShowB(!showB)
+const App = () => {
+  const [state] = useState(() => new State())
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <ProgressBar animated now={45} />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={6}>
-          <Toast show={showA} onClose={toggleShowA}>
-            <Toast.Header>
-              <img
-                src="holder.js/20x20?text=%20"
-                className="rounded mr-2"
-                alt=""
+    <Router>
+      <Observer>
+        {() => (
+          <>
+            <Menu username={state.auth.username} />
+            <Switch>
+              {/*change to something else*/}
+              <Route
+                exact
+                path="/"
+                render={() => <Login setSession={state.useAuth.setSession} />}
               />
-              <strong className="mr-auto">Bootstrap</strong>
-              <small>11 mins ago</small>
-            </Toast.Header>
-            <Toast.Body>
-              Woohoo, you're reading this text in a Toast!
-            </Toast.Body>
-          </Toast>
-        </Col>
-        <Col xs={6}>
-          <Button onClick={toggleShowA}>
-            Toggle Toast <strong>with</strong> Animation
-          </Button>
-        </Col>
-        <Col xs={6} className="my-1">
-          <Toast onClose={toggleShowB} show={showB} animation={false}>
-            <Toast.Header>
-              <img
-                src="holder.js/20x20?text=%20"
-                className="rounded mr-2"
-                alt=""
+              <Route
+                exact
+                path="/login"
+                render={() => <Login setSession={state.useAuth.setSession} />}
               />
-              <strong className="mr-auto">Bootstrap</strong>
-              <small>11 mins ago</small>
-            </Toast.Header>
-            <Toast.Body>
-              Woohoo, you're reading this text in a Toast!
-            </Toast.Body>
-          </Toast>
-        </Col>
-        <Col xs={6}>
-          <Button onClick={toggleShowB}>
-            Toggle Toast <strong>without</strong> Animation
-          </Button>
-        </Col>
-      </Row>
-    </Container>
+              <Route
+                exact
+                path="/about"
+                render={() => (
+                  <About
+                    auth={state.auth}
+                    setSession={state.useAuth.setSession}
+                    chemail={state.useAuth.chemail}
+                  />
+                )}
+              />
+              <Route exact path="/register" component={AddUser} />
+            </Switch>
+          </>
+        )}
+      </Observer>
+    </Router>
   )
 }
 
