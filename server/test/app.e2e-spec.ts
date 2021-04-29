@@ -105,8 +105,6 @@ describe('Auth module', () => {
       })
     expect(res.status).toBe(201)
     expect(res.body.message).toEqual('Logged in')
-    expect(typeof res.body.token).toEqual('string')
-    expect(res.body.token.length).toBeGreaterThan(10)
   })
 
   it('should forbidden auth with wrong token', async () => {
@@ -188,8 +186,6 @@ describe('Profile module', () => {
     expect(res.status).toBe(201)
     expect(res.body.token).toBeDefined()
     expect(res.body.message).toEqual('Email changed')
-    expect(typeof res.body.token).toBe('string')
-    expect(res.body.token.length).toBeGreaterThan(10)
   })
 
   it('should return error(s) if try to change email to invalid', async () => {
@@ -234,8 +230,6 @@ describe('Profile module', () => {
     expect(res1.status).toBe(201)
     expect(res1.body.token).toBeDefined()
     expect(res1.body.message).toEqual('Email changed')
-    expect(typeof res1.body.token).toBe('string')
-    expect(res1.body.token.length).toBeGreaterThan(10)
   })
 
   it('should change password', async () => {

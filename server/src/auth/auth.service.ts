@@ -38,7 +38,6 @@ export class AuthService {
       {
         session: session,
         username: user.username,
-        email: user.email,
       },
       config.get('jwtSecret'),
     )

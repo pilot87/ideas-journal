@@ -15,15 +15,7 @@ export class ProfileService {
     session: string,
   ) {
     await Profile.chemail(changeEmailDto, username)
-    const token = jwt.sign(
-      {
-        session: session,
-        username: username,
-        email: changeEmailDto.email,
-      },
-      config.get('jwtSecret'),
-    )
-    return { message: 'Email changed', token: token }
+    return { message: 'Email changed' }
   }
 
   async chpasswd(changePasswordDto: ChangePasswordDto, username: string) {
