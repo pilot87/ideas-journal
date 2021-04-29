@@ -7,6 +7,7 @@ export class State {
   a = axios.create(this.auth.request_params)
   useAuth = {
     setSession: (email: string, username: string, token: string) => {
+      this.auth.request_params.headers.Authorization = 'Bearer' + token
       this.auth = {
         username: username,
         email: email,

@@ -73,7 +73,7 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
 
   const handleLogout = () => {
     setSession('', '', '')
-    window.location.assign('login')
+    window.location.assign('/')
   }
 
   return (
@@ -139,6 +139,17 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
         <Col>
           <Button variant="primary" onClick={handleChangePassword}>
             Change password
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Button
+            variant="primary"
+            onClick={handleLogout}
+            className="float-right"
+          >
+            Logout
           </Button>
         </Col>
       </Row>
