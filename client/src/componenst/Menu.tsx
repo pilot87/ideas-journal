@@ -16,6 +16,7 @@ export const Menu = (props: { username: string }) => {
         </NavLink>
       </Nav>
       <NavLink
+        id="Hello"
         className="btn btn-secondary"
         to={username === '' ? '/register' : '/about'}
       >

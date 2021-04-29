@@ -113,6 +113,7 @@ export const Login = (props: { setSession: any }) => {
           <Button
             variant="secondary"
             className="float-right"
+            id="login"
             onClick={handleLogin}
           >
             Login

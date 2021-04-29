@@ -79,16 +79,18 @@ export const AddUser = () => {
             />
           </Form.Group>
         </Col>
-        <Col>
-          {msg.errors.email.map((err) => (
-            <Toast>
+      </Row>
+      <Row>
+        {msg.errors.email.map((err) => (
+          <Toast>
+            <Col>
               <Toast.Header closeButton={false}>
                 <strong className="mr-auto">Error in email</strong>
               </Toast.Header>
               <Toast.Body>{err}</Toast.Body>
-            </Toast>
-          ))}
-        </Col>
+            </Col>
+          </Toast>
+        ))}
       </Row>
       <Row>
         <Col>
@@ -104,16 +106,18 @@ export const AddUser = () => {
             />
           </Form.Group>
         </Col>
-        <Col>
-          {msg.errors.username.map((err) => (
-            <Toast>
+      </Row>
+      <Row>
+        {msg.errors.username.map((err) => (
+          <Toast>
+            <Col>
               <Toast.Header closeButton={false}>
                 <strong className="mr-auto">Error in user name</strong>
               </Toast.Header>
               <Toast.Body>{err}</Toast.Body>
-            </Toast>
-          ))}
-        </Col>
+            </Col>
+          </Toast>
+        ))}
       </Row>
       <Row>
         <Col>
@@ -129,20 +133,23 @@ export const AddUser = () => {
             />
           </Form.Group>
         </Col>
-        <Col>
-          {msg.errors.password.map((err) => (
-            <Toast>
+      </Row>
+      <Row>
+        {msg.errors.password.map((err) => (
+          <Toast>
+            <Col>
               <Toast.Header closeButton={false}>
                 <strong className="mr-auto">Error in password</strong>
               </Toast.Header>
               <Toast.Body>{err}</Toast.Body>
-            </Toast>
-          ))}
-        </Col>
+            </Col>
+          </Toast>
+        ))}
       </Row>
       <Row>
         <Col>
           <Button
+            id="register"
             variant="secondary"
             className="float-right"
             onClick={handleRegister}

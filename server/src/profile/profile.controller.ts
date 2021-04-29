@@ -18,7 +18,7 @@ import { NegativeFilter } from '../negative.filter'
 import { UserInterceptor } from '../user.interceptor'
 import { ActivityInterceptor } from '../activity.interceptor'
 import { Request } from 'express'
-import { ChangePasswordDto } from './dto/change-passwd.dto';
+import { ChangePasswordDto } from './dto/change-passwd.dto'
 
 @Controller('api/profile')
 @UsePipes(new ValidationPipe())
@@ -40,7 +40,10 @@ export class ProfileController {
   }
 
   @Post('chpasswd')
-  async chpasswd(@Body() changePasswordDto: ChangePasswordDto, @Req() req: Request) {
+  async chpasswd(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Req() req: Request,
+  ) {
     return await this.profileService.chpasswd(
       changePasswordDto,
       <string>req.headers.user,

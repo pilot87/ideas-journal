@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "client": "cross-env NODE_ENV=development npm run start --prefix client",
+    "client:build": "npm run build --prefix client",
     "server:dev": "cross-env NODE_ENV=development npm run start:dev --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development concurrently \"npm run server:dev\" \"npm run client\""
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run server:dev\" \"npm run client\"",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,10 @@
     "concurrently": "^6.0.2",
     "cross-env": "^7.0.3",
     "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@cypress/code-coverage": "^3.9.5",
+    "@cyys/stylelint-config-cy": "^1.0.2",
+    "cypress": "^7.2.0"
   }
 }
