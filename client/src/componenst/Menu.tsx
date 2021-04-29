@@ -11,12 +11,12 @@ export const Menu = (props: { username: string }) => {
         Ideas journal
       </NavLink>
       <Nav className="mr-auto">
-        <NavLink to="/register" className="nav-link">
-          Register
+        <NavLink to="/addidea" className="nav-link">
+          Create idea
         </NavLink>
       </Nav>
       <NavLink
-        id="Hello"
+        id="hello"
         className="btn btn-secondary"
         to={username === '' ? '/register' : '/about'}
       >

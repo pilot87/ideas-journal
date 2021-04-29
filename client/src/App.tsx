@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
-import { observer, Observer } from 'mobx-react'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom'
+import { Observer } from 'mobx-react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import { State } from './app/mobx'
 import { AddUser } from './pages/addUser'
 import { Menu } from './componenst/Menu'
 import { Login } from './pages/login'
 import { About } from './pages/about'
+import { AddIdea } from './pages/addIdea'
 
 const App = () => {
   const [state] = useState(() => new State())
@@ -31,6 +27,13 @@ const App = () => {
               />
               <Route
                 exact
+                path="/addidea"
+                render={() => (
+                  <AddIdea request_params={state.auth.request_params} />
+                )}
+              />
+              <Route
+                exact
                 path="/login"
                 render={() => <Login setSession={state.useAuth.setSession} />}
               />
@@ -39,7 +42,8 @@ const App = () => {
                 path="/about"
                 render={() => (
                   <About
-                    auth={state.auth}
+                    email={state.auth.email}
+                    request_params={state.auth.request_params}
                     setSession={state.useAuth.setSession}
                     chemail={state.useAuth.chemail}
                   />

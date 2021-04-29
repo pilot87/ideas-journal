@@ -60,10 +60,9 @@ export const Login = (props: { setSession: any }) => {
     <Container fluid>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput1">
+          <Form.Group controlId="username">
             <Form.Label>User name</Form.Label>
             <Form.Control
-              id="username"
               name="username"
               type="text"
               placeholder="User name"
@@ -85,10 +84,9 @@ export const Login = (props: { setSession: any }) => {
       </Row>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput3">
+          <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              id="password"
               name="password"
               type="password"
               placeholder="Password"

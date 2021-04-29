@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import axios from 'axios'
 
 import Container from 'react-bootstrap/Container'
@@ -67,10 +68,9 @@ export const AddUser = () => {
     <Container fluid>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput2">
+          <Form.Group controlId="email">
             <Form.Label>Email address</Form.Label>
             <Form.Control
-              id="email"
               name="email"
               type="email"
               placeholder="name@example.com"
@@ -94,10 +94,9 @@ export const AddUser = () => {
       </Row>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput1">
+          <Form.Group controlId="username">
             <Form.Label>User name</Form.Label>
             <Form.Control
-              id="username"
               name="username"
               type="text"
               placeholder="User name"
@@ -121,10 +120,9 @@ export const AddUser = () => {
       </Row>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput3">
+          <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              id="password"
               name="password"
               type="password"
               placeholder="Password"
@@ -146,16 +144,20 @@ export const AddUser = () => {
           </Toast>
         ))}
       </Row>
-      <Row>
+      <Row className="justify-content-evenly">
         <Col>
-          <Button
-            id="register"
-            variant="secondary"
-            className="float-right"
-            onClick={handleRegister}
-          >
+          <Button id="register" variant="secondary" onClick={handleRegister}>
             Register
           </Button>
+        </Col>
+        <Col>
+          <NavLink
+            id="login"
+            className="float-right btn btn-secondary"
+            to="/login"
+          >
+            Log in
+          </NavLink>
         </Col>
       </Row>
     </Container>

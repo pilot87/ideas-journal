@@ -10,8 +10,13 @@ import Button from 'react-bootstrap/Button'
 
 const axios = require('axios').default
 
-export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
-  const auth = props.auth
+export const About = (props: {
+  request_params: Auth['request_params']
+  email: string
+  chemail: any
+  setSession: any
+}) => {
+  const request_params = props.request_params
   const chemail = props.chemail
   const setSession = props.setSession
 
@@ -36,12 +41,12 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
     })
   }
 
-  const a = axios.create(auth.request_params)
+  const a = axios.create(request_params)
 
   const handleChangeEmail = () => {
     a.post('/profile/chemail', { email: form.email.msg })
       .then((res: any) => {
-        chemail(res.data.username)
+        chemail(form.email.msg)
         setMsg({
           errors: { email: [], password: [] },
         })
@@ -80,10 +85,9 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
     <Container>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput2">
-            <Form.Label>Email address</Form.Label>
+          <Form.Group controlId="email">
+            <Form.Label>{'Your current email: ' + props.email}</Form.Label>
             <Form.Control
-              id="email"
               name="email"
               type="email"
               placeholder="name@example.com"
@@ -105,17 +109,16 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
       </Row>
       <Row>
         <Col>
-          <Button variant="primary" onClick={handleChangeEmail}>
+          <Button id="chemail" variant="primary" onClick={handleChangeEmail}>
             Change email
           </Button>
         </Col>
       </Row>
       <Row>
         <Col>
-          <Form.Group controlId="exampleForm.ControlInput3">
+          <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              id="password"
               name="password"
               type="password"
               placeholder="Password"
@@ -137,7 +140,11 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
       </Row>
       <Row>
         <Col>
-          <Button variant="primary" onClick={handleChangePassword}>
+          <Button
+            id="chpasswd"
+            variant="primary"
+            onClick={handleChangePassword}
+          >
             Change password
           </Button>
         </Col>
@@ -145,6 +152,7 @@ export const About = (props: { auth: Auth; chemail: any; setSession: any }) => {
       <Row>
         <Col>
           <Button
+            id="logout"
             variant="primary"
             onClick={handleLogout}
             className="float-right"

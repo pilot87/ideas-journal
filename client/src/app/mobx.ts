@@ -4,7 +4,6 @@ import { auth } from '../features/auth'
 
 export class State {
   @observable auth = auth
-  a = axios.create(this.auth.request_params)
   useAuth = {
     setSession: (email: string, username: string, token: string) => {
       this.auth.request_params.headers.Authorization = 'Bearer' + token
