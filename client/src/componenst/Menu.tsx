@@ -14,6 +14,9 @@ export const Menu = (props: { username: string }) => {
         <NavLink to="/addidea" className="nav-link">
           Create idea
         </NavLink>
+        <NavLink to="/ideas" className="nav-link">
+          Ideas
+        </NavLink>
       </Nav>
       <NavLink
         id="hello"

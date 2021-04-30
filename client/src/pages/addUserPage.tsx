@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/esm/Form'
 import Button from 'react-bootstrap/Button'
 import Toast from 'react-bootstrap/Toast'
 
-export const AddUser = () => {
+export const AddUserPage = () => {
   const [form, setForm] = useState({
     email: { msg: '', state: 'adduser_label' },
     password: { msg: '', state: 'adduser_label' },
@@ -42,7 +42,7 @@ export const AddUser = () => {
       username: form.username.msg,
       password: form.password.msg,
     })
-      .then((res: any) => {
+      .then(() => {
         setMsg({
           errors: { email: [], password: [], username: [] },
         })

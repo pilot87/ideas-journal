@@ -9,7 +9,7 @@ import Toast from 'react-bootstrap/Toast'
 import Button from 'react-bootstrap/Button'
 import { Auth } from '../features/auth'
 
-export const Login = (props: { setSession: any }) => {
+export const LoginPage = (props: { setSession: any }) => {
   const [form, setForm] = useState({
     username: { msg: '', state: '' },
     password: { msg: '', state: '' },

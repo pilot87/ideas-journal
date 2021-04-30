@@ -184,8 +184,6 @@ describe('Profile module', () => {
       .set({ authorization: 'Bearer ' + token })
       .send({ email: newemail })
     expect(res.status).toBe(201)
-    expect(res.body.token).toBeDefined()
-    expect(res.body.message).toEqual('Email changed')
   })
 
   it('should return error(s) if try to change email to invalid', async () => {
@@ -215,21 +213,6 @@ describe('Profile module', () => {
     expect(res.status).toBe(400)
     expect(Array.isArray(res.body.message)).toBe(true)
     expect(res.body.message.length).toBeGreaterThanOrEqual(1)
-  })
-
-  it('should chage email and change it again with new token', async () => {
-    const res0 = await request(app.getHttpServer())
-      .post('/api/profile/chemail')
-      .set({ authorization: 'Bearer ' + token })
-      .send({ email: newemail })
-
-    const res1 = await request(app.getHttpServer())
-      .post('/api/profile/chemail')
-      .set({ authorization: 'Bearer ' + res0.body.token })
-      .send({ email: newemail })
-    expect(res1.status).toBe(201)
-    expect(res1.body.token).toBeDefined()
-    expect(res1.body.message).toEqual('Email changed')
   })
 
   it('should change password', async () => {

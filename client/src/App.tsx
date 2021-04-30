@@ -3,11 +3,12 @@ import { Observer } from 'mobx-react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import { State } from './app/mobx'
-import { AddUser } from './pages/addUser'
+import { AddUserPage } from './pages/addUserPage'
 import { Menu } from './componenst/Menu'
-import { Login } from './pages/login'
-import { About } from './pages/about'
-import { AddIdea } from './pages/addIdea'
+import { LoginPage } from './pages/loginPage'
+import { AboutPage } from './pages/aboutPage'
+import { AddIdeaPage } from './pages/addIdeaPage'
+import { IdeasPage } from './pages/ideasPage'
 
 const App = () => {
   const [state] = useState(() => new State())
@@ -23,25 +24,39 @@ const App = () => {
               <Route
                 exact
                 path="/"
-                render={() => <Login setSession={state.useAuth.setSession} />}
+                render={() => (
+                  <LoginPage setSession={state.useAuth.setSession} />
+                )}
               />
               <Route
                 exact
                 path="/addidea"
                 render={() => (
-                  <AddIdea request_params={state.auth.request_params} />
+                  <AddIdeaPage request_params={state.auth.request_params} />
+                )}
+              />
+              <Route
+                exact
+                path="/ideas"
+                render={() => (
+                  <IdeasPage
+                    ideas={state.ideas}
+                    update={state.useIdeas.update}
+                  />
                 )}
               />
               <Route
                 exact
                 path="/login"
-                render={() => <Login setSession={state.useAuth.setSession} />}
+                render={() => (
+                  <LoginPage setSession={state.useAuth.setSession} />
+                )}
               />
               <Route
                 exact
                 path="/about"
                 render={() => (
-                  <About
+                  <AboutPage
                     email={state.auth.email}
                     request_params={state.auth.request_params}
                     setSession={state.useAuth.setSession}
@@ -49,7 +64,7 @@ const App = () => {
                   />
                 )}
               />
-              <Route exact path="/register" component={AddUser} />
+              <Route exact path="/register" component={AddUserPage} />
             </Switch>
           </>
         )}

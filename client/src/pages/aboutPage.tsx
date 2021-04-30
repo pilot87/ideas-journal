@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 import { Auth } from '../features/auth'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -10,7 +9,7 @@ import Button from 'react-bootstrap/Button'
 
 const axios = require('axios').default
 
-export const About = (props: {
+export const AboutPage = (props: {
   request_params: Auth['request_params']
   email: string
   chemail: any
@@ -29,11 +28,6 @@ export const About = (props: {
     errors: { password: [], email: [] },
   })
 
-  const [msg2, setMsg2] = useState({
-    message: '',
-    color: 'gray',
-  })
-
   const changeHandler = (event: any) => {
     setForm({
       ...form,
@@ -45,7 +39,7 @@ export const About = (props: {
 
   const handleChangeEmail = () => {
     a.post('/profile/chemail', { email: form.email.msg })
-      .then((res: any) => {
+      .then(() => {
         chemail(form.email.msg)
         setMsg({
           errors: { email: [], password: [] },
@@ -69,10 +63,22 @@ export const About = (props: {
   const handleChangePassword = () => {
     a.post('/profile/chpasswd', { password: form.password.msg })
       .then((res: any) => {
-        setMsg2({ message: 'Password has changed', color: 'green' })
+        setMsg({
+          errors: { email: [], password: [] },
+        })
       })
       .catch((err: any) =>
-        setMsg2({ message: err.response.data.message, color: 'red' }),
+        setMsg({
+          errors: Object.keys(msg.errors).reduce(
+            (acc: any, key: string) => {
+              acc[key] = err.response.data.message.filter((s: string) =>
+                s.includes(key),
+              )
+              return acc
+            },
+            { email: '', password: '', username: '' },
+          ),
+        }),
       )
   }
 

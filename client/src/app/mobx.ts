@@ -1,6 +1,13 @@
 import { makeObservable, observable } from 'mobx'
-import axios from 'axios'
 import { auth } from '../features/auth'
+import { ideas } from '../features/idea'
+import axios from 'axios'
+
+const a = axios.create({
+  baseURL: '/api',
+  timeout: 30000,
+  headers: { 'Content-Type': 'application/json', Authorization: '' },
+})
 
 export class State {
   @observable auth = auth
@@ -23,6 +30,18 @@ export class State {
       }
     },
   }
+
+  @observable ideas = ideas
+  useIdeas = {
+    update: () => {
+      a.get('/idea/listall')
+        .then((res) => {
+          this.ideas = res.data.list
+        })
+        .catch()
+    },
+  }
+
   constructor() {
     makeObservable(this)
   }
