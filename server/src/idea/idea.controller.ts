@@ -23,7 +23,6 @@ import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/idea')
 @UsePipes(new ValidationPipe())
-@UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
 @UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
@@ -32,6 +31,7 @@ export class IdeaController {
   constructor(private readonly ideaService: IdeaService) {}
 
   @Post('create')
+  @UseGuards(AuthGuard)
   async create(@Body() createIdeaDto: CreateIdeaDto, @Req() req: Request) {
     return await this.ideaService.create(
       createIdeaDto,
@@ -55,6 +55,7 @@ export class IdeaController {
   }
 
   @Post('newcomment')
+  @UseGuards(AuthGuard)
   async newComment(
     @Body() createCommentDto: CreateCommentDto,
     @Req() req: Request,

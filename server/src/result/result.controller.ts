@@ -20,7 +20,6 @@ import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/result')
 @UsePipes(new ValidationPipe())
-@UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
 @UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
@@ -29,6 +28,7 @@ export class ResultController {
   constructor(private readonly resultService: ResultService) {}
 
   @Post('create')
+  @UseGuards(AuthGuard)
   async create(@Body() createResultDto: CreateResultDto, @Req() req: Request) {
     return await this.resultService.create(
       createResultDto,

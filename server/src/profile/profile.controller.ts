@@ -22,7 +22,6 @@ import { ChangePasswordDto } from './dto/change-passwd.dto'
 
 @Controller('api/profile')
 @UsePipes(new ValidationPipe())
-@UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
 @UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
@@ -31,6 +30,7 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Post('chemail')
+  @UseGuards(AuthGuard)
   async chemail(@Body() changeEmailDto: ChangeEmailDto, @Req() req: Request) {
     return await this.profileService.chemail(
       changeEmailDto,
@@ -40,6 +40,7 @@ export class ProfileController {
   }
 
   @Post('chpasswd')
+  @UseGuards(AuthGuard)
   async chpasswd(
     @Body() changePasswordDto: ChangePasswordDto,
     @Req() req: Request,

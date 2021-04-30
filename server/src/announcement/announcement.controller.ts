@@ -24,7 +24,6 @@ import { NegativeFilter } from '../negative.filter'
 
 @Controller('api/announcement')
 @UsePipes(new ValidationPipe())
-@UseGuards(AuthGuard)
 @UseFilters(new DuplicateFilter())
 @UseFilters(new NegativeFilter())
 @UseInterceptors(UserInterceptor)
@@ -33,6 +32,7 @@ export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 
   @Post('create')
+  @UseGuards(AuthGuard)
   async create(
     @Body() createAnnouncementDto: CreateAnnouncementDto,
     @Req() req: Request,
@@ -48,6 +48,7 @@ export class AnnouncementController {
   }
 
   @Post('createcomment')
+  @UseGuards(AuthGuard)
   async createcomment(
     @Body() createCommentDto: CreateCommentDto,
     @Req() req: Request,
@@ -64,6 +65,7 @@ export class AnnouncementController {
   }
 
   @Post('choose')
+  @UseGuards(AuthGuard)
   async choose(
     @Body() chooseAnnouncementDto: ChooseAnnouncementDto,
     @Req() req: Request,
