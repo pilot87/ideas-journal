@@ -43,7 +43,10 @@ export class Auth {
     this.session = value
   }
   @action setUsername(value: string) {
-    this.username = value
+    this.send.get('/idea/listall').then((res) => {
+      this.username = value
+    })
+    // this.username = value
   }
   @action setEmail(value: string) {
     this.email = value

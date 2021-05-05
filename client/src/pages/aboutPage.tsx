@@ -86,7 +86,7 @@ export const AboutPage = (props: {
     setSession('')
     setEmail('')
     setUsername('')
-    window.location.assign('/')
+    // window.location.assign('/')
   }
 
   return (

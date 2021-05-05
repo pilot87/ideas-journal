@@ -12,11 +12,23 @@ import { IdeasPage } from './pages/ideasPage'
 import { auth } from './features/auth'
 import { ideas } from './features/ideas'
 
+const updCycle = async () => {
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
+  while (true) {
+    if (ideas.auto) {
+      // console.log('cycle')
+      ideas.update()
+      auth.setUsername('random girlfriend')
+    }
+    await sleep(10000)
+  }
+}
+
 const App = () => {
-  // const [state] = useState(() => new State())
-  // useEffect(() => {
-  //   state.updCycle()
-  // }, [])
+  useEffect(() => {
+    updCycle()
+  }, [])
 
   return (
     <Router>
@@ -49,7 +61,8 @@ const App = () => {
                   <IdeasPage
                     ideas={ideas.ideas}
                     update={ideas.update}
-                    // watch={state.useIdeas.setAuto}
+                    setAuto={ideas.setAuto}
+                    id={ideas.id}
                   />
                 )}
               />

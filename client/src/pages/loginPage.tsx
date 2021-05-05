@@ -45,7 +45,7 @@ export const LoginPage = (props: {
         props.setSession('Bearer ' + res.data.token)
         props.setUsername(res.data.username)
         props.setEmail(res.data.email)
-        window.location.assign('about')
+        // window.location.assign('about')
       })
       .catch((err: any) => {
         setMsg({
