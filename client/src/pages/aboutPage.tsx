@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Auth } from '../features/auth'
+import { observer } from 'mobx-react-lite'
+
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -7,18 +8,14 @@ import Form from 'react-bootstrap/Form'
 import Toast from 'react-bootstrap/Toast'
 import Button from 'react-bootstrap/Button'
 
-export const AboutPage = (props: {
-  send: Auth['send']
-  email: Auth['email']
-  setUsername: Auth['setUsername']
-  setEmail: Auth['setEmail']
-  setSession: Auth['setSession']
-}) => {
-  const send = props.send
-  const email = props.email
-  const setUsername = props.setUsername
-  const setEmail = props.setEmail
-  const setSession = props.setSession
+import { auth } from '../features/auth'
+
+export const AboutPage = observer(() => {
+  const send = auth.send
+  const email = auth.email
+  const setUsername = auth.setUsername
+  const setEmail = auth.setEmail
+  const setSession = auth.setSession
 
   const [form, setForm] = useState({
     email: { msg: '', state: '' },
@@ -171,4 +168,4 @@ export const AboutPage = (props: {
       </Row>
     </Container>
   )
-}
+})

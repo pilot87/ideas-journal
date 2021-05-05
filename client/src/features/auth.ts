@@ -5,6 +5,7 @@ import {
   action,
   autorun,
   makeAutoObservable,
+  runInAction,
 } from 'mobx'
 import axios from 'axios'
 
@@ -44,7 +45,9 @@ export class Auth {
   }
   @action setUsername(value: string) {
     this.send.get('/idea/listall').then((res) => {
-      this.username = value
+      runInAction(async () => {
+        this.username = value
+      })
     })
     // this.username = value
   }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import axios from 'axios'
+import { observer } from 'mobx-react-lite'
 
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -9,7 +9,9 @@ import Form from 'react-bootstrap/esm/Form'
 import Button from 'react-bootstrap/Button'
 import Toast from 'react-bootstrap/Toast'
 
-export const AddUserPage = () => {
+import { auth } from '../features/auth'
+
+export const AddUserPage = observer(() => {
   const [form, setForm] = useState({
     email: { msg: '', state: 'adduser_label' },
     password: { msg: '', state: 'adduser_label' },
@@ -30,18 +32,13 @@ export const AddUserPage = () => {
     })
   }
 
-  const a = axios.create({
-    baseURL: '/api',
-    timeout: 30000,
-    headers: { 'Content-Type': 'application/json', Authorization: '' },
-  })
-
   const handleRegister = async () => {
-    a.post('/auth/register', {
-      email: form.email.msg,
-      username: form.username.msg,
-      password: form.password.msg,
-    })
+    auth.send
+      .post('/auth/register', {
+        email: form.email.msg,
+        username: form.username.msg,
+        password: form.password.msg,
+      })
       .then(() => {
         setMsg({
           errors: { email: [], password: [], username: [] },
@@ -162,4 +159,4 @@ export const AddUserPage = () => {
       </Row>
     </Container>
   )
-}
+})

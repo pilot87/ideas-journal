@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -7,13 +6,10 @@ import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Toast from 'react-bootstrap/Toast'
 import Button from 'react-bootstrap/Button'
-import { Auth } from '../features/auth'
 
-export const LoginPage = (props: {
-  setSession: Auth['setSession']
-  setUsername: Auth['setUsername']
-  setEmail: Auth['setEmail']
-}) => {
+import { auth } from '../features/auth'
+
+export const LoginPage = () => {
   const [form, setForm] = useState({
     username: { msg: '', state: '' },
     password: { msg: '', state: '' },
@@ -30,21 +26,16 @@ export const LoginPage = (props: {
     })
   }
 
-  const a = axios.create({
-    baseURL: '/api',
-    timeout: 30000,
-    headers: { 'Content-Type': 'application/json', Authorization: '' },
-  })
-
   const handleLogin = () => {
-    a.post('/auth/login', {
-      username: form.username.msg,
-      password: form.password.msg,
-    })
+    auth.send
+      .post('/auth/login', {
+        username: form.username.msg,
+        password: form.password.msg,
+      })
       .then((res: any) => {
-        props.setSession('Bearer ' + res.data.token)
-        props.setUsername(res.data.username)
-        props.setEmail(res.data.email)
+        auth.setSession('Bearer ' + res.data.token)
+        auth.setUsername(res.data.username)
+        auth.setEmail(res.data.email)
         // window.location.assign('about')
       })
       .catch((err: any) => {

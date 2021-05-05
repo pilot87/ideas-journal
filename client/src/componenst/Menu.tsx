@@ -2,9 +2,11 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
+import { auth } from '../features/auth'
+import { observer } from 'mobx-react-lite'
 
-export const Menu = (props: { username: string }) => {
-  const username = props.username
+export const Menu = observer(() => {
+  const username = auth.username
   return (
     <Navbar bg="dark" variant="dark">
       <NavLink className="navbar-brand" to="/">
@@ -27,4 +29,4 @@ export const Menu = (props: { username: string }) => {
       </NavLink>
     </Navbar>
   )
-}
+})
