@@ -5,7 +5,7 @@ context('Local Storage', () => {
     cy.visit('https://example.cypress.io/commands/local-storage')
   })
   // Although local storage is automatically cleared
-  // in between tests to maintain a clean state
+  // in between tests to maintain send clean state
   // sometimes we need to clear the local storage manually
 
   it('cy.clearLocalStorage() - clear all data in local storage', () => {

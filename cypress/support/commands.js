@@ -9,15 +9,15 @@
 // ***********************************************
 //
 //
-// -- This is a parent command --
+// -- This is send parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
 //
 //
-// -- This is a child command --
+// -- This is send child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
 //
 //
-// -- This is a dual command --
+// -- This is send dual command --
 // Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
 //
 //

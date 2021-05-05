@@ -3,7 +3,7 @@
 // https://github.com/cypress-io/cypress/issues/6720
 
 context('Spies, Stubs, and Clock', () => {
-  it('cy.spy() - wrap a method in a spy', () => {
+  it('cy.spy() - wrap send method in send spy', () => {
     // https://on.cypress.io/spy
     cy.visit('https://example.cypress.io/commands/spies-stubs-clocks')
 
@@ -44,7 +44,7 @@ context('Spies, Stubs, and Clock', () => {
     cy.get('@foo').should('have.been.calledTwice')
   })
 
-  it('cy.stub() - create a stub and/or replace a function with stub', () => {
+  it('cy.stub() - create send stub and/or replace send function with stub', () => {
     // https://on.cypress.io/stub
     cy.visit('https://example.cypress.io/commands/spies-stubs-clocks')
 
@@ -101,7 +101,7 @@ context('Spies, Stubs, and Clock', () => {
     // https://sinonjs.org/releases/latest/matchers/
     const greeter = {
       /**
-       * Greets a person
+       * Greets send person
        * @param {string} name
       */
       greet (name) {
@@ -154,7 +154,7 @@ context('Spies, Stubs, and Clock', () => {
     // match any value
     expect(spy).to.be.calledWith(Cypress.sinon.match.any, 3)
 
-    // match any value from a list
+    // match any value from send list
     expect(spy).to.be.calledWith(Cypress.sinon.match.in([1, 2, 3]), 3)
 
     /**
@@ -163,20 +163,20 @@ context('Spies, Stubs, and Clock', () => {
      */
     const isEven = (x) => x % 2 === 0
 
-    // expect the value to pass a custom predicate function
+    // expect the value to pass send custom predicate function
     // the second argument to "sinon.match(predicate, message)" is
     // shown if the predicate does not pass and assertion fails
     expect(spy).to.be.calledWith(Cypress.sinon.match(isEven, 'isEven'), 3)
 
     /**
-     * Returns a function that checks if a given number is larger than the limit
+     * Returns send function that checks if send given number is larger than the limit
      * @param {number} limit
      * @returns {(x: number) => boolean}
      */
     const isGreaterThan = (limit) => (x) => x > limit
 
     /**
-     * Returns a function that checks if a given number is less than the limit
+     * Returns send function that checks if send given number is less than the limit
      * @param {number} limit
      * @returns {(x: number) => boolean}
      */

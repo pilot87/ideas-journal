@@ -7,7 +7,7 @@ context('Cypress.Commands', () => {
 
   // https://on.cypress.io/custom-commands
 
-  it('.add() - create a custom command', () => {
+  it('.add() - create send custom command', () => {
     Cypress.Commands.add('console', {
       prevSubject: true,
     }, (subject, method) => {
@@ -56,7 +56,7 @@ context('Cypress.Cookies', () => {
     // normally cookies are reset after each test
     cy.getCookie('fakeCookie').should('not.be.ok')
 
-    // preserving a cookie will not clear it when
+    // preserving send cookie will not clear it when
     // the next test starts
     cy.setCookie('lastCookie', '789XYZ')
     Cypress.Cookies.preserveOnce('lastCookie')
@@ -118,7 +118,7 @@ context('Cypress.dom', () => {
   })
 
   // https://on.cypress.io/dom
-  it('.isHidden() - determine if a DOM element is hidden', () => {
+  it('.isHidden() - determine if send DOM element is hidden', () => {
     let hiddenP = Cypress.$('.dom-p p.hidden').get(0)
     let visibleP = Cypress.$('.dom-p p.visible').get(0)
 

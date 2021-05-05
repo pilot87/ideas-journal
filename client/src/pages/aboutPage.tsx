@@ -7,16 +7,17 @@ import Form from 'react-bootstrap/Form'
 import Toast from 'react-bootstrap/Toast'
 import Button from 'react-bootstrap/Button'
 
-const axios = require('axios').default
-
 export const AboutPage = (props: {
-  request_params: Auth['request_params']
-  email: string
-  chemail: any
-  setSession: any
+  send: Auth['send']
+  email: Auth['email']
+  setUsername: Auth['setUsername']
+  setEmail: Auth['setEmail']
+  setSession: Auth['setSession']
 }) => {
-  const request_params = props.request_params
-  const chemail = props.chemail
+  const send = props.send
+  const email = props.email
+  const setUsername = props.setUsername
+  const setEmail = props.setEmail
   const setSession = props.setSession
 
   const [form, setForm] = useState({
@@ -27,7 +28,6 @@ export const AboutPage = (props: {
   const [msg, setMsg] = useState({
     errors: { password: [], email: [] },
   })
-
   const changeHandler = (event: any) => {
     setForm({
       ...form,
@@ -35,12 +35,11 @@ export const AboutPage = (props: {
     })
   }
 
-  const a = axios.create(request_params)
-
   const handleChangeEmail = () => {
-    a.post('/profile/chemail', { email: form.email.msg })
+    send
+      .post('/profile/chemail', { email: form.email.msg })
       .then(() => {
-        chemail(form.email.msg)
+        setEmail(form.email.msg)
         setMsg({
           errors: { email: [], password: [] },
         })
@@ -61,7 +60,8 @@ export const AboutPage = (props: {
   }
 
   const handleChangePassword = () => {
-    a.post('/profile/chpasswd', { password: form.password.msg })
+    send
+      .post('/profile/chpasswd', { password: form.password.msg })
       .then((res: any) => {
         setMsg({
           errors: { email: [], password: [] },
@@ -83,7 +83,9 @@ export const AboutPage = (props: {
   }
 
   const handleLogout = () => {
-    setSession('', '', '')
+    setSession('')
+    setEmail('')
+    setUsername('')
     window.location.assign('/')
   }
 
@@ -92,7 +94,7 @@ export const AboutPage = (props: {
       <Row>
         <Col>
           <Form.Group controlId="email">
-            <Form.Label>{'Your current email: ' + props.email}</Form.Label>
+            <Form.Label>{'Your current email: ' + email}</Form.Label>
             <Form.Control
               name="email"
               type="email"

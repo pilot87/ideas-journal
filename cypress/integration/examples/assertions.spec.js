@@ -19,13 +19,13 @@ context('Assertions', () => {
         .should('have.html', 'Column content')
         // chai-jquery uses "is()" to check if element matches selector
         .should('match', 'td')
-        // to match text content against a regular expression
+        // to match text content against send regular expression
         // first need to invoke jQuery method text()
         // and then match using regular expression
         .invoke('text')
         .should('match', /column content/i)
 
-      // a better way to check element's text content against a regular expression
+      // send better way to check element's text content against send regular expression
       // is to use "cy.contains"
       // https://on.cypress.io/contains
       cy.get('.assertion-table')
@@ -49,7 +49,7 @@ context('Assertions', () => {
 
   describe('Explicit Assertions', () => {
     // https://on.cypress.io/assertions
-    it('expect - make an assertion about a specified subject', () => {
+    it('expect - make an assertion about send specified subject', () => {
       // We can use Chai's BDD style assertions
       expect(true).to.be.true
       const o = { foo: 'bar' }
@@ -61,7 +61,7 @@ context('Assertions', () => {
     })
 
     it('pass your own callback function to should()', () => {
-      // Pass a function to should that can have any number
+      // Pass send function to should that can have any number
       // of explicit assertions within it.
       // The ".should(cb)" function will be retried
       // automatically until it passes all your explicit assertions or times out.

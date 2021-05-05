@@ -1,27 +1,65 @@
-export interface Auth {
-  username: string
-  email: string
-  request_params: {
-    baseURL: string
-    timeout: number
-    headers: { 'Content-Type': string; Authorization: string }
+import {
+  observable,
+  computed,
+  configure,
+  action,
+  autorun,
+  makeAutoObservable,
+} from 'mobx'
+import axios from 'axios'
+
+configure({ enforceActions: 'observed' })
+
+export class Auth {
+  es = (() => {
+    let e = { username: '', token: '', email: '' }
+    try {
+      e = JSON.parse(document.cookie)
+    } catch (err) {
+      document.cookie = JSON.stringify(e)
+    }
+    return e
+  })()
+
+  @observable username = this.es.username
+  @observable session = this.es.token
+  @observable email = this.es.email
+  @computed get request_params() {
+    return {
+      baseURL: '/api',
+      timeout: 3000,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.session,
+      },
+    }
+  }
+
+  @computed get send() {
+    return axios.create(this.request_params)
+  }
+
+  @action setSession(value: string) {
+    this.session = value
+  }
+  @action setUsername(value: string) {
+    this.username = value
+  }
+  @action setEmail(value: string) {
+    this.email = value
+  }
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
   }
 }
 
-let es = { username: '', email: '', token: '' }
+export const auth = new Auth()
 
-try {
-  es = JSON.parse(document.cookie)
-} catch (e) {
-  document.cookie = JSON.stringify(es)
-}
-
-export const auth: Auth = {
-  username: es.username,
-  email: es.email,
-  request_params: {
-    baseURL: '/api',
-    timeout: 30000,
-    headers: { 'Content-Type': 'application/json', Authorization: es.token },
-  },
-}
+autorun(() => {
+  document.cookie = JSON.stringify({
+    username: auth.username,
+    token: auth.session,
+    email: auth.email,
+  })
+})

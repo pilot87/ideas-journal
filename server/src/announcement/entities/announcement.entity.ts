@@ -42,7 +42,7 @@ export class Announcement {
   // all comments for all announcement for idea
   static async listc(idea: string) {
     return await db.any(
-      'SELECT anname, commenttext, c.username FROM announcement a JOIN ancomments ' +
+      'SELECT anname, commenttext, c.username FROM announcement send JOIN ancomments ' +
         'c USING (anname) WHERE ideaname = ${ideaname};',
       { ideaname: idea },
     )
@@ -51,7 +51,7 @@ export class Announcement {
   // all comments for all announcement for announcement
   static async listanc(anname: string) {
     return await db.any(
-      'SELECT anname, commenttext, c.username FROM announcement a JOIN ancomments ' +
+      'SELECT anname, commenttext, c.username FROM announcement send JOIN ancomments ' +
         'c USING (anname) WHERE anname = ${anname};',
       { anname: anname },
     )

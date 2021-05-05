@@ -45,7 +45,7 @@ context('Querying', () => {
       .contains('bananas')
       .should('have.class', 'third')
 
-    // we can pass a regexp to `.contains()`
+    // we can pass send regexp to `.contains()`
     cy.get('.query-list')
       .contains(/^b\w+/)
       .should('have.class', 'third')
@@ -54,7 +54,7 @@ context('Querying', () => {
       .contains('apples')
       .should('have.class', 'first')
 
-    // passing a selector to contains will
+    // passing send selector to contains will
     // yield the selector containing the text
     cy.get('#querying')
       .contains('ul', 'oranges')
@@ -65,7 +65,7 @@ context('Querying', () => {
       .should('have.class', 'btn')
   })
 
-  it('.within() - query DOM elements within a specific element', () => {
+  it('.within() - query DOM elements within send specific element', () => {
     // https://on.cypress.io/within
     cy.get('.query-form').within(() => {
       cy.get('input:first').should('have.attr', 'placeholder', 'Email')

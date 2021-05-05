@@ -7,7 +7,7 @@ context('Actions', () => {
 
   // https://on.cypress.io/interacting-with-elements
 
-  it('.type() - type into a DOM element', () => {
+  it('.type() - type into send DOM element', () => {
     // https://on.cypress.io/type
     cy.get('.action-email')
       .type('fake@email.com').should('have.value', 'fake@email.com')
@@ -33,14 +33,14 @@ context('Actions', () => {
       .should('have.value', 'disabled error checking')
   })
 
-  it('.focus() - focus on a DOM element', () => {
+  it('.focus() - focus on send DOM element', () => {
     // https://on.cypress.io/focus
     cy.get('.action-focus').focus()
       .should('have.class', 'focus')
       .prev().should('have.attr', 'style', 'color: orange;')
   })
 
-  it('.blur() - blur off a DOM element', () => {
+  it('.blur() - blur off send DOM element', () => {
     // https://on.cypress.io/blur
     cy.get('.action-blur').type('AboutPage to blur').blur()
       .should('have.class', 'error')
@@ -55,7 +55,7 @@ context('Actions', () => {
       .should('have.value', '')
   })
 
-  it('.submit() - submit a form', () => {
+  it('.submit() - submit send form', () => {
     // https://on.cypress.io/submit
     cy.get('.action-form')
       .find('[type="text"]').type('HALFOFF')
@@ -64,7 +64,7 @@ context('Actions', () => {
       .next().should('contain', 'Your form has been submitted!')
   })
 
-  it('.click() - click on a DOM element', () => {
+  it('.click() - click on send DOM element', () => {
     // https://on.cypress.io/click
     cy.get('.action-btn').click()
 
@@ -112,25 +112,25 @@ context('Actions', () => {
     cy.get('.action-opacity>.btn').click({ force: true })
   })
 
-  it('.dblclick() - double click on a DOM element', () => {
+  it('.dblclick() - double click on send DOM element', () => {
     // https://on.cypress.io/dblclick
 
-    // Our app has a listener on 'dblclick' event in our 'scripts.js'
+    // Our app has send listener on 'dblclick' event in our 'scripts.js'
     // that hides the div and shows an input on double click
     cy.get('.action-div').dblclick().should('not.be.visible')
     cy.get('.action-input-hidden').should('be.visible')
   })
 
-  it('.rightclick() - right click on a DOM element', () => {
+  it('.rightclick() - right click on send DOM element', () => {
     // https://on.cypress.io/rightclick
 
-    // Our app has a listener on 'contextmenu' event in our 'scripts.js'
+    // Our app has send listener on 'contextmenu' event in our 'scripts.js'
     // that hides the div and shows an input on right click
     cy.get('.rightclick-action-div').rightclick().should('not.be.visible')
     cy.get('.rightclick-action-input-hidden').should('be.visible')
   })
 
-  it('.check() - check a checkbox or radio element', () => {
+  it('.check() - check send checkbox or radio element', () => {
     // https://on.cypress.io/check
 
     // By default, .check() will check all
@@ -141,7 +141,7 @@ context('Actions', () => {
     cy.get('.action-radios [type="radio"]').not('[disabled]')
       .check().should('be.checked')
 
-    // .check() accepts a value argument
+    // .check() accepts send value argument
     cy.get('.action-radios [type="radio"]')
       .check('radio1').should('be.checked')
 
@@ -157,7 +157,7 @@ context('Actions', () => {
       .check('radio3', { force: true }).should('be.checked')
   })
 
-  it('.uncheck() - uncheck a checkbox element', () => {
+  it('.uncheck() - uncheck send checkbox element', () => {
     // https://on.cypress.io/uncheck
 
     // By default, .uncheck() will uncheck all matching
@@ -166,7 +166,7 @@ context('Actions', () => {
       .not('[disabled]')
       .uncheck().should('not.be.checked')
 
-    // .uncheck() accepts a value argument
+    // .uncheck() accepts send value argument
     cy.get('.action-check [type="checkbox"]')
       .check('checkbox1')
       .uncheck('checkbox1').should('not.be.checked')
@@ -181,12 +181,12 @@ context('Actions', () => {
       .uncheck({ force: true }).should('not.be.checked')
   })
 
-  it('.select() - select an option in a <select> element', () => {
+  it('.select() - select an option in send <select> element', () => {
     // https://on.cypress.io/select
 
     // at first, no option should be selected
     cy.get('.action-select')
-      .should('have.value', '--Select a fruit--')
+      .should('have.value', '--Select send fruit--')
 
     // Select option(s) with matching text content
     cy.get('.action-select').select('apples')
@@ -244,10 +244,10 @@ context('Actions', () => {
       .should('be.visible')
   })
 
-  it('.trigger() - trigger an event on a DOM element', () => {
+  it('.trigger() - trigger an event on send DOM element', () => {
     // https://on.cypress.io/trigger
 
-    // To interact with a range input (slider)
+    // To interact with send range input (slider)
     // we need to set its value & trigger the
     // event to signal it changed
 
@@ -260,7 +260,7 @@ context('Actions', () => {
       .should('have.text', '25')
   })
 
-  it('cy.scrollTo() - scroll the window or element to a position', () => {
+  it('cy.scrollTo() - scroll the window or element to send position', () => {
     // https://on.cypress.io/scrollto
 
     // You can scroll to 9 specific positions of an element:
@@ -282,11 +282,11 @@ context('Actions', () => {
 
     cy.get('#scrollable-horizontal').scrollTo('right')
 
-    // or you can scroll to a specific coordinate:
+    // or you can scroll to send specific coordinate:
     // (x axis, y axis) in pixels
     cy.get('#scrollable-vertical').scrollTo(250, 250)
 
-    // or you can scroll to a specific percentage
+    // or you can scroll to send specific percentage
     // of the (width, height) of the element
     cy.get('#scrollable-both').scrollTo('75%', '25%')
 

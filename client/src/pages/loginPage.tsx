@@ -9,7 +9,11 @@ import Toast from 'react-bootstrap/Toast'
 import Button from 'react-bootstrap/Button'
 import { Auth } from '../features/auth'
 
-export const LoginPage = (props: { setSession: any }) => {
+export const LoginPage = (props: {
+  setSession: Auth['setSession']
+  setUsername: Auth['setUsername']
+  setEmail: Auth['setEmail']
+}) => {
   const [form, setForm] = useState({
     username: { msg: '', state: '' },
     password: { msg: '', state: '' },
@@ -38,10 +42,12 @@ export const LoginPage = (props: { setSession: any }) => {
       password: form.password.msg,
     })
       .then((res: any) => {
-        props.setSession(res.data.email, res.data.username, res.data.token)
+        props.setSession('Bearer ' + res.data.token)
+        props.setUsername(res.data.username)
+        props.setEmail(res.data.email)
         window.location.assign('about')
       })
-      .catch((err: any) =>
+      .catch((err: any) => {
         setMsg({
           errors: Object.keys(msg.errors).reduce(
             (acc: any, key: string) => {
@@ -52,8 +58,8 @@ export const LoginPage = (props: { setSession: any }) => {
             },
             { password: '', username: '' },
           ),
-        }),
-      )
+        })
+      })
   }
 
   return (

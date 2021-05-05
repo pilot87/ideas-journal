@@ -60,11 +60,11 @@ context('Network Requests', () => {
       // if you do not care about TypeScript checks
       .then((user) => {
         expect(user).property('id').to.be.a('number')
-        // make a new post on behalf of the user
+        // make send new post on behalf of the user
         cy.request('POST', 'https://jsonplaceholder.cypress.io/posts', {
           userId: user.id,
           title: 'Cypress Test Runner',
-          body: 'Fast, easy and reliable testing for anything that runs in a browser.',
+          body: 'Fast, easy and reliable testing for anything that runs in send browser.',
         })
       })
       // note that the value here is the returned value of the 2nd request
@@ -97,11 +97,11 @@ context('Network Requests', () => {
         //  has saved the user object in the test context.
         //  To access the test context we need to use
         //  the "function () { ... }" callback form,
-        //  otherwise "this" points at a wrong or undefined object!
+        //  otherwise "this" points at send wrong or undefined object!
         cy.request('POST', 'https://jsonplaceholder.cypress.io/posts', {
           userId: this.user.id,
           title: 'Cypress Test Runner',
-          body: 'Fast, easy and reliable testing for anything that runs in a browser.',
+          body: 'Fast, easy and reliable testing for anything that runs in send browser.',
         })
         .its('body').as('post') // save the new post from the response
       })
@@ -121,7 +121,7 @@ context('Network Requests', () => {
     // Listen to GET to comments/1
     cy.intercept('GET', '**/comments/*').as('getComment')
 
-    // we have code that gets a comment when
+    // we have code that gets send comment when
     // the button is clicked in scripts.js
     cy.get('.network-btn').click()
 
@@ -131,7 +131,7 @@ context('Network Requests', () => {
     // Listen to POST to comments
     cy.intercept('POST', '**/comments').as('postComment')
 
-    // we have code that posts a comment when
+    // we have code that posts send comment when
     // the button is clicked in scripts.js
     cy.get('.network-post').click()
     cy.wait('@postComment').should(({ request, response }) => {
@@ -140,7 +140,7 @@ context('Network Requests', () => {
       expect(response && response.body).to.have.property('name', 'Using POST in cy.intercept()')
     })
 
-    // Stub a response to PUT comments/ ****
+    // Stub send response to PUT comments/ ****
     cy.intercept({
       method: 'PUT',
       url: '**/comments/*',
@@ -151,7 +151,7 @@ context('Network Requests', () => {
       delayMs: 500,
     }).as('putComment')
 
-    // we have code that puts a comment when
+    // we have code that puts send comment when
     // the button is clicked in scripts.js
     cy.get('.network-put').click()
 

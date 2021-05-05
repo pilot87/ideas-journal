@@ -1,47 +1,55 @@
-import React, { useState } from 'react'
-import { Observer } from 'mobx-react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Observer } from 'mobx-react-lite'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import { State } from './app/mobx'
+// import { State } from './app/mobx'
 import { AddUserPage } from './pages/addUserPage'
 import { Menu } from './componenst/Menu'
 import { LoginPage } from './pages/loginPage'
 import { AboutPage } from './pages/aboutPage'
 import { AddIdeaPage } from './pages/addIdeaPage'
 import { IdeasPage } from './pages/ideasPage'
+import { auth } from './features/auth'
+import { ideas } from './features/ideas'
 
 const App = () => {
-  const [state] = useState(() => new State())
+  // const [state] = useState(() => new State())
+  // useEffect(() => {
+  //   state.updCycle()
+  // }, [])
 
   return (
     <Router>
       <Observer>
         {() => (
           <>
-            <Menu username={state.auth.username} />
+            <Menu username={auth.username} />
             <Switch>
               {/*change to something else*/}
               <Route
                 exact
                 path="/"
                 render={() => (
-                  <LoginPage setSession={state.useAuth.setSession} />
+                  <LoginPage
+                    setSession={auth.setSession}
+                    setUsername={auth.setUsername}
+                    setEmail={auth.setEmail}
+                  />
                 )}
               />
               <Route
                 exact
                 path="/addidea"
-                render={() => (
-                  <AddIdeaPage request_params={state.auth.request_params} />
-                )}
+                render={() => <AddIdeaPage send={auth.send} />}
               />
               <Route
                 exact
                 path="/ideas"
                 render={() => (
                   <IdeasPage
-                    ideas={state.ideas}
-                    update={state.useIdeas.update}
+                    ideas={ideas.ideas}
+                    update={ideas.update}
+                    // watch={state.useIdeas.setAuto}
                   />
                 )}
               />
@@ -49,7 +57,11 @@ const App = () => {
                 exact
                 path="/login"
                 render={() => (
-                  <LoginPage setSession={state.useAuth.setSession} />
+                  <LoginPage
+                    setSession={auth.setSession}
+                    setUsername={auth.setUsername}
+                    setEmail={auth.setEmail}
+                  />
                 )}
               />
               <Route
@@ -57,10 +69,11 @@ const App = () => {
                 path="/about"
                 render={() => (
                   <AboutPage
-                    email={state.auth.email}
-                    request_params={state.auth.request_params}
-                    setSession={state.useAuth.setSession}
-                    chemail={state.useAuth.chemail}
+                    email={auth.email}
+                    setSession={auth.setSession}
+                    setEmail={auth.setEmail}
+                    setUsername={auth.setUsername}
+                    send={auth.send}
                   />
                 )}
               />

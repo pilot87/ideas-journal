@@ -11,11 +11,11 @@ context('Cookies', () => {
     cy.clearCookies()
   })
 
-  it('cy.getCookie() - get a browser cookie', () => {
+  it('cy.getCookie() - get send browser cookie', () => {
     // https://on.cypress.io/getcookie
-    cy.get('#getCookie .set-a-cookie').click()
+    cy.get('#getCookie .set-send-cookie').click()
 
-    // cy.getCookie() yields a cookie object
+    // cy.getCookie() yields send cookie object
     cy.getCookie('token').should('have.property', 'value', '123ABC')
   })
 
@@ -23,7 +23,7 @@ context('Cookies', () => {
     // https://on.cypress.io/getcookies
     cy.getCookies().should('be.empty')
 
-    cy.get('#getCookies .set-a-cookie').click()
+    cy.get('#getCookies .set-send-cookie').click()
 
     // cy.getCookies() yields an array of cookies
     cy.getCookies().should('have.length', 1).should((cookies) => {
@@ -37,21 +37,21 @@ context('Cookies', () => {
     })
   })
 
-  it('cy.setCookie() - set a browser cookie', () => {
+  it('cy.setCookie() - set send browser cookie', () => {
     // https://on.cypress.io/setcookie
     cy.getCookies().should('be.empty')
 
     cy.setCookie('foo', 'bar')
 
-    // cy.getCookie() yields a cookie object
+    // cy.getCookie() yields send cookie object
     cy.getCookie('foo').should('have.property', 'value', 'bar')
   })
 
-  it('cy.clearCookie() - clear a browser cookie', () => {
+  it('cy.clearCookie() - clear send browser cookie', () => {
     // https://on.cypress.io/clearcookie
     cy.getCookie('token').should('be.null')
 
-    cy.get('#clearCookie .set-a-cookie').click()
+    cy.get('#clearCookie .set-send-cookie').click()
 
     cy.getCookie('token').should('have.property', 'value', '123ABC')
 
@@ -65,7 +65,7 @@ context('Cookies', () => {
     // https://on.cypress.io/clearcookies
     cy.getCookies().should('be.empty')
 
-    cy.get('#clearCookies .set-a-cookie').click()
+    cy.get('#clearCookies .set-send-cookie').click()
 
     cy.getCookies().should('have.length', 1)
 

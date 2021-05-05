@@ -35,7 +35,7 @@ context('Navigation', () => {
     cy.reload(true)
   })
 
-  it('cy.visit() - visit a remote url', () => {
+  it('cy.visit() - visit send remote url', () => {
     // https://on.cypress.io/visit
 
     // Visit any sub-domain of your current domain

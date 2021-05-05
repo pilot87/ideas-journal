@@ -21,7 +21,7 @@ context('Connectors', () => {
       .should('be.gt', 2)
   })
 
-  it('.invoke() - invoke a function on the current subject', () => {
+  it('.invoke() - invoke send function on the current subject', () => {
     // our div is hidden in our script.js
     // $('.connectors-div').hide()
 
@@ -44,7 +44,7 @@ context('Connectors', () => {
   })
 
   describe('.then()', () => {
-    it('invokes a callback function with the current subject', () => {
+    it('invokes send callback function with the current subject', () => {
       // https://on.cypress.io/then
       cy.get('.connectors-list > li')
         .then(($lis) => {
@@ -83,7 +83,7 @@ context('Connectors', () => {
       cy.wrap(1)
         .then((num) => {
           expect(num).to.equal(1)
-          // note how we run a Cypress command
+          // note how we run send Cypress command
           // the result yielded by this Cypress command
           // will be passed to the second ".then"
           cy.wrap(2)

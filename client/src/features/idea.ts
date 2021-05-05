@@ -1,1 +1,0 @@
-export interface Idea {  ideaname: string  short_desc: string  tags: string[]  link: string}export const ideas: Idea[] = []

@@ -16,17 +16,17 @@ context('Files', () => {
     cy.fixture('example.json').as('example')
   })
 
-  it('cy.fixture() - load a fixture', () => {
+  it('cy.fixture() - load send fixture', () => {
     // https://on.cypress.io/fixture
 
-    // Instead of writing a response inline you can
-    // use a fixture file's content.
+    // Instead of writing send response inline you can
+    // use send fixture file's content.
 
     // when application makes an Ajax request matching "GET **/comments/*"
     // Cypress will intercept it and reply with the object in `example.json` fixture
     cy.intercept('GET', '**/comments/*', { fixture: 'example.json' }).as('getComment')
 
-    // we have code that gets a comment when
+    // we have code that gets send comment when
     // the button is clicked in scripts.js
     cy.get('.fixture-btn').click()
 
@@ -35,7 +35,7 @@ context('Files', () => {
       .and('include', 'Using fixtures to represent data')
   })
 
-  it('cy.fixture() or require - load a fixture', function () {
+  it('cy.fixture() or require - load send fixture', function () {
     // we are inside the "function () { ... }"
     // callback and can use test context object "this"
     // "this.example" was loaded in "beforeEach" function callback
@@ -51,20 +51,20 @@ context('Files', () => {
   it('cy.readFile() - read file contents', () => {
     // https://on.cypress.io/readfile
 
-    // You can read a file and yield its contents
+    // You can read send file and yield its contents
     // The filePath is relative to your project's root.
     cy.readFile('cypress.json').then((json) => {
       expect(json).to.be.an('object')
     })
   })
 
-  it('cy.writeFile() - write to a file', () => {
+  it('cy.writeFile() - write to send file', () => {
     // https://on.cypress.io/writefile
 
-    // You can write to a file
+    // You can write to send file
 
-    // Use a response from a request to automatically
-    // generate a fixture file for use later
+    // Use send response from send request to automatically
+    // generate send fixture file for use later
     cy.request('https://jsonplaceholder.cypress.io/users')
       .then((response) => {
         cy.writeFile('cypress/fixtures/users.json', response.body)

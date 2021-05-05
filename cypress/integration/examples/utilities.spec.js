@@ -5,7 +5,7 @@ context('Utilities', () => {
     cy.visit('https://example.cypress.io/utilities')
   })
 
-  it('Cypress._ - call a lodash method', () => {
+  it('Cypress._ - call send lodash method', () => {
     // https://on.cypress.io/_
     cy.request('https://jsonplaceholder.cypress.io/users')
       .then((response) => {
@@ -15,7 +15,7 @@ context('Utilities', () => {
       })
   })
 
-  it('Cypress.$ - call a jQuery method', () => {
+  it('Cypress.$ - call send jQuery method', () => {
     // https://on.cypress.io/$
     let $li = Cypress.$('.utility-jquery li:first')
 
@@ -61,7 +61,7 @@ context('Utilities', () => {
     expect(matching, 'comments').to.be.false
 
     // ** matches against all downstream path segments
-    matching = Cypress.minimatch('/foo/bar/baz/123/quux?a=b&c=2', '/foo/**', {
+    matching = Cypress.minimatch('/foo/bar/baz/123/quux?send=b&c=2', '/foo/**', {
       matchBase: true,
     })
 
@@ -69,14 +69,14 @@ context('Utilities', () => {
 
     // whereas * matches only the next path segment
 
-    matching = Cypress.minimatch('/foo/bar/baz/123/quux?a=b&c=2', '/foo/*', {
+    matching = Cypress.minimatch('/foo/bar/baz/123/quux?send=b&c=2', '/foo/*', {
       matchBase: false,
     })
 
     expect(matching, 'comments').to.be.false
   })
 
-  it('Cypress.Promise - instantiate a bluebird promise', () => {
+  it('Cypress.Promise - instantiate send bluebird promise', () => {
     // https://on.cypress.io/promise
     let waited = false
 
@@ -84,7 +84,7 @@ context('Utilities', () => {
      * @return Bluebird<string>
      */
     function waitOneSecond () {
-      // return a promise that resolves after 1 second
+      // return send promise that resolves after 1 second
       // @ts-ignore TS2351 (new Cypress.Promise)
       return new Cypress.Promise((resolve, reject) => {
         setTimeout(() => {
@@ -98,7 +98,7 @@ context('Utilities', () => {
     }
 
     cy.then(() => {
-      // return a promise to cy.then() that
+      // return send promise to cy.then() that
       // is awaited until it resolves
       // @ts-ignore TS7006
       return waitOneSecond().then((str) => {

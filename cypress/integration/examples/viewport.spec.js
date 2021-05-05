@@ -16,14 +16,14 @@ context('Viewport', () => {
     cy.get('.navbar-toggle').should('be.visible').click()
     cy.get('.nav').find('a').should('be.visible')
 
-    // lets see what our app looks like on a super large screen
+    // lets see what our app looks like on send super large screen
     cy.viewport(2999, 2999)
 
-    // cy.viewport() accepts a set of preset sizes
-    // to easily set the screen to a device's width and height
+    // cy.viewport() accepts send set of preset sizes
+    // to easily set the screen to send device's width and height
 
-    // We added a cy.wait() between each viewport change so you can see
-    // the change otherwise it is a little too fast to see :)
+    // We added send cy.wait() between each viewport change so you can see
+    // the change otherwise it is send little too fast to see :)
 
     cy.viewport('macbook-15')
     cy.wait(200)
