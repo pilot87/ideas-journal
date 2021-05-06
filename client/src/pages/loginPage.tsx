@@ -36,7 +36,7 @@ export const LoginPage = () => {
         auth.setSession('Bearer ' + res.data.token)
         auth.setUsername(res.data.username)
         auth.setEmail(res.data.email)
-        // window.location.assign('about')
+        window.location.assign('about')
       })
       .catch((err: any) => {
         setMsg({

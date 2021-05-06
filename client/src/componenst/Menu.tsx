@@ -1,9 +1,11 @@
 import React from 'react'
+import { observer } from 'mobx-react-lite'
 import { NavLink } from 'react-router-dom'
+
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
+
 import { auth } from '../features/auth'
-import { observer } from 'mobx-react-lite'
 
 export const Menu = observer(() => {
   const username = auth.username

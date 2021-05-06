@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { Observer } from 'mobx-react-lite'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import { AddUserPage } from './pages/addUserPage'
@@ -9,6 +8,9 @@ import { AboutPage } from './pages/aboutPage'
 import { AddIdeaPage } from './pages/addIdeaPage'
 import { IdeasPage } from './pages/ideasPage'
 import { ideas } from './features/ideas'
+import { ModalLogin } from './componenst/ModalLogin'
+
+import { ForbiddenException } from './features/errors'
 
 const updCycle = async () => {
   const sleep = (ms: number) =>
@@ -28,6 +30,7 @@ const App = () => {
 
   return (
     <Router>
+      <ModalLogin />
       <Menu />
       <Switch>
         {/*change to something else*/}

@@ -83,7 +83,7 @@ export const AboutPage = observer(() => {
     setSession('')
     setEmail('')
     setUsername('')
-    // window.location.assign('/')
+    window.location.assign('/')
   }
 
   return (

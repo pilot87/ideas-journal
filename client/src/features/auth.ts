@@ -9,6 +9,8 @@ import {
 } from 'mobx'
 import axios from 'axios'
 
+import { ForbiddenException } from './errors'
+
 configure({ enforceActions: 'observed' })
 
 export class Auth {
@@ -37,19 +39,41 @@ export class Auth {
   }
 
   @computed get send() {
-    return axios.create(this.request_params)
+    return new Proxy(axios.create(this.request_params), {
+      get(target: any, prop: string | symbol): Promise<any> {
+        if (
+          typeof prop === 'string' &&
+          ['get', 'post'].includes(<string>prop)
+        ) {
+          return new Proxy(target[prop], {
+            apply(target: any, thisArg: any, argArray: any[]) {
+              return new Promise(async (resolve, reject) => {
+                try {
+                  const res = await target(...argArray)
+                  resolve(res)
+                } catch (err) {
+                  if (
+                    err.response.status === 403 &&
+                    err.response.data.message === 'Forbidden resource'
+                  ) {
+                    throw new ForbiddenException()
+                  }
+                  reject(err)
+                }
+              })
+            },
+          })
+        }
+        return target[prop]
+      },
+    })
   }
 
   @action setSession(value: string) {
     this.session = value
   }
   @action setUsername(value: string) {
-    this.send.get('/idea/listall').then((res) => {
-      runInAction(async () => {
-        this.username = value
-      })
-    })
-    // this.username = value
+    this.username = value
   }
   @action setEmail(value: string) {
     this.email = value
