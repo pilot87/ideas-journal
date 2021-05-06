@@ -9928,5 +9928,8 @@ h3 {
     border-color: #dee2e6;
   }
 }
+.hover {
+  cursor: pointer;
+}
 
 /*# sourceMappingURL=index.css.map */
