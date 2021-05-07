@@ -60,9 +60,9 @@ export class Ideas {
 
   static async getByName(ideaname: string) {
     return await db.any(
-      'SELECT ideaname i, username author, short_desc, tagname, describtion, "link", status FROM ' +
+      'SELECT ideaname, username author, short_desc, tagname tags, describtion, "link", status FROM ' +
         'ideas NATURAL LEFT OUTER JOIN ideastags NATURAL LEFT JOIN tags WHERE ideaname = ${ideaname} ' +
-        'ORDER BY i;',
+        'ORDER BY ideaname;',
       { ideaname: ideaname },
     )
   }

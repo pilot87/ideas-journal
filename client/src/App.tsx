@@ -9,8 +9,8 @@ import { AddIdeaPage } from './pages/addIdeaPage'
 import { IdeasPage } from './pages/ideasPage'
 import { ideas } from './features/ideas'
 import { ModalLogin } from './componenst/ModalLogin'
-
-import { ForbiddenException } from './features/errors'
+import { viewIdea } from './features/viewIdea'
+import { ViewIdeaPage } from './pages/viewIdeaPage'
 
 const updCycle = async () => {
   const sleep = (ms: number) =>
@@ -18,6 +18,9 @@ const updCycle = async () => {
   while (true) {
     if (ideas.auto) {
       ideas.update()
+    }
+    if (viewIdea.auto) {
+      viewIdea.update()
     }
     await sleep(10000)
   }
@@ -40,6 +43,7 @@ const App = () => {
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/register" component={AddUserPage} />
+        <Route path="/ideafull/:idea" component={ViewIdeaPage} />
       </Switch>
     </Router>
   )
