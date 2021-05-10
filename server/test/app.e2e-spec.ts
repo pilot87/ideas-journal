@@ -141,8 +141,15 @@ describe('Auth module', () => {
       })
 
     const res1 = await request(app.getHttpServer())
-      .get('/api/idea/listall')
-      .set({ authorization: 'Bearer ' + res.body.token + '0' })
+      .post('/api/idea/create')
+      .set({ Authorization: 'Bearer ' + res.body.token + '0' })
+      .send({
+        ideaname: 'ideaname',
+        describtion: 'Some describtion',
+        short_desc: 'Some short describtion',
+        tags: ['Tag0', 'Tag1'],
+        link: 'https://ya.ru',
+      })
     expect(res1.status).toBe(403)
     expect(res1.body.message).toEqual('Forbidden resource')
   })
@@ -459,6 +466,8 @@ describe('Idea module', () => {
         password: password1,
       })
     ).body.token
+
+    console.log(ideaname)
 
     await request(app.getHttpServer())
       .post('/api/idea/create')

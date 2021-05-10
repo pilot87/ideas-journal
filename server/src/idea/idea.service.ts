@@ -52,7 +52,7 @@ export class IdeaService {
       throw new NegativeException({ message: 'No ideas found' })
     }
     const result = ilist[0]
-    result.tags = ilist.map((el) => el.tagname)
+    result.tags = ilist.map((el) => el.tags)
     delete result.tagname
     const tlist = await Ideas.getIdeaComments(idea)
     result.comments = tlist.map((el) => ({
