@@ -7,7 +7,7 @@ import {
   ValidationPipe,
   UseGuards,
   UseFilters,
-  UseInterceptors,
+  UseInterceptors, Get, Param,
 } from '@nestjs/common'
 import { ResultService } from './result.service'
 import { CreateResultDto } from './dto/create-result.dto'
@@ -34,5 +34,10 @@ export class ResultController {
       createResultDto,
       <string>req.headers.user,
     )
+  }
+
+  @Get('getbyname/:name')
+  async getbyname(@Param('name') name: string) {
+    return await this.resultService.getbyname(name)
   }
 }

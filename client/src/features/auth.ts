@@ -5,7 +5,6 @@ import {
   action,
   autorun,
   makeAutoObservable,
-  runInAction,
 } from 'mobx'
 import axios from 'axios'
 

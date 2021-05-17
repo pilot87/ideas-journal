@@ -20,4 +20,12 @@ export class Result {
         throw new DuplicateException(e['detail'])
       })
   }
+
+  static async getbyname(name: string) {
+    return (
+      await db.any('SELECT comment FROM results WHERE ideaname=${ideaname};', {
+        ideaname: name,
+      })
+    )[0].comment
+  }
 }

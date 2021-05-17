@@ -11,6 +11,7 @@ import { ideas } from './features/ideas'
 import { ModalLogin } from './componenst/ModalLogin'
 import { viewIdea } from './features/viewIdea'
 import { ViewIdeaPage } from './pages/viewIdeaPage'
+import { AddAnnouncementPage } from './pages/addAnnouncementPage'
 
 const updCycle = async () => {
   const sleep = (ms: number) =>
@@ -39,6 +40,7 @@ const App = () => {
         {/*change to something else*/}
         <Route exact path="/" component={LoginPage} />
         <Route exact path="/addidea" component={AddIdeaPage} />
+        <Route path="/addannaoncement/:idea" component={AddAnnouncementPage} />
         <Route exact path="/ideas" component={IdeasPage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/about" component={AboutPage} />

@@ -41,9 +41,10 @@ export class AnnouncementService {
       message: 'Announcement',
       an: {
         ...an,
-        comments: (await Announcement.listanc(anname)).map(
-          (c) => c.commenttext,
-        ),
+        comments: (await Announcement.listanc(anname)).map((c) => ({
+          text: c.commenttext,
+          author: c.username,
+        })),
         tags: (await Announcement.listant(anname)).map((t) => t.tagname),
       },
     }

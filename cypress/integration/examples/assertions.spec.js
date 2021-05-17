@@ -108,7 +108,7 @@ context('Assertions', () => {
         })
     })
 
-    it('can throw any error', () => {
+    it('can throw any errors', () => {
       cy.get('.docs-header')
         .find('div')
         .should(($div) => {

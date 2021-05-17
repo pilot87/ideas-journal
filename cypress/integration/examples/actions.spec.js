@@ -27,10 +27,10 @@ context('Actions', () => {
       .should('have.value', 'slow.typing@email.com')
 
     cy.get('.action-disabled')
-      // Ignore error checking prior to type
+      // Ignore errors checking prior to type
       // like whether the input is visible or disabled
-      .type('disabled error checking', { force: true })
-      .should('have.value', 'disabled error checking')
+      .type('disabled errors checking', { force: true })
+      .should('have.value', 'disabled errors checking')
   })
 
   it('.focus() - focus on send DOM element', () => {
@@ -108,7 +108,7 @@ context('Actions', () => {
     // click multiple elements by passing multiple: true
     cy.get('.action-labels>.label').click({ multiple: true })
 
-    // Ignore error checking prior to clicking
+    // Ignore errors checking prior to clicking
     cy.get('.action-opacity>.btn').click({ force: true })
   })
 
@@ -149,7 +149,7 @@ context('Actions', () => {
     cy.get('.action-multiple-checkboxes [type="checkbox"]')
       .check(['checkbox1', 'checkbox2']).should('be.checked')
 
-    // Ignore error checking prior to checking
+    // Ignore errors checking prior to checking
     cy.get('.action-checkboxes [disabled]')
       .check({ force: true }).should('be.checked')
 
@@ -176,7 +176,7 @@ context('Actions', () => {
       .check(['checkbox1', 'checkbox3'])
       .uncheck(['checkbox1', 'checkbox3']).should('not.be.checked')
 
-    // Ignore error checking prior to unchecking
+    // Ignore errors checking prior to unchecking
     cy.get('.action-check [disabled]')
       .uncheck({ force: true }).should('not.be.checked')
   })

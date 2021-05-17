@@ -59,7 +59,7 @@ export const AboutPage = observer(() => {
   const handleChangePassword = () => {
     send
       .post('/profile/chpasswd', { password: form.password.msg })
-      .then((res: any) => {
+      .then(() => {
         setMsg({
           errors: { email: [], password: [] },
         })

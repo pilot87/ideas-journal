@@ -3,6 +3,7 @@ import { CreateResultDto } from './dto/create-result.dto'
 import { Result } from './entities/result.entity'
 import { Ideas } from '../idea/entities/idea.entity'
 import { NegativeException } from '../negative.filter'
+import {Announcement} from "../announcement/entities/announcement.entity";
 
 @Injectable()
 export class ResultService {
@@ -22,5 +23,13 @@ export class ResultService {
     }
     await Result.create(createResultDto)
     return { message: 'Result created' }
+  }
+
+  async getbyname(name: string) {
+    const text = await Result.getbyname(name)
+    return {
+      message: 'Result',
+      text: text,
+    }
   }
 }

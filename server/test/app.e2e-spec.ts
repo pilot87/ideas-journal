@@ -34,7 +34,7 @@ describe('Auth module', () => {
     expect(res.body).toEqual({ message: 'User registered' })
   })
 
-  it('should return error if password too short', async () => {
+  it('should return errors if password too short', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -193,7 +193,7 @@ describe('Profile module', () => {
     expect(res.status).toBe(201)
   })
 
-  it('should return error(s) if try to change email to invalid', async () => {
+  it('should return errors(s) if try to change email to invalid', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/profile/chemail')
       .set({ authorization: 'Bearer ' + token })
@@ -203,7 +203,7 @@ describe('Profile module', () => {
     expect(res.body.message.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('should return error if try to change email to existing', async () => {
+  it('should return errors if try to change email to existing', async () => {
     await request(app.getHttpServer())
       .post('/api/auth/register')
       .send({
@@ -231,7 +231,7 @@ describe('Profile module', () => {
     expect(res.body.message).toEqual('Password changed')
   })
 
-  it('should return error if password too short', async () => {
+  it('should return errors if password too short', async () => {
     const res = await request(app.getHttpServer())
       .post('/api/profile/chpasswd')
       .set({ authorization: 'Bearer ' + token })
@@ -466,8 +466,6 @@ describe('Idea module', () => {
         password: password1,
       })
     ).body.token
-
-    console.log(ideaname)
 
     await request(app.getHttpServer())
       .post('/api/idea/create')
@@ -724,11 +722,11 @@ describe('Announcement module', () => {
       text: 'Announcement text',
       status: 'new',
       tags: ['Tag2', 'Tag3'],
-      comments: ['Some comment'],
+      comments: [{ text: 'Some comment', author: customer }],
     })
   })
 
-  it('should choose announcement and mode toggle idea to await status', async () => {
+  it('should choose announcement and made toggle idea to await status', async () => {
     ideaname = gen_username(10)
     await request(app.getHttpServer())
       .post('/api/idea/create')
