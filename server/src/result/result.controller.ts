@@ -36,8 +36,8 @@ export class ResultController {
     )
   }
 
-  @Get('getbyname/:name')
-  async getbyname(@Param('name') name: string) {
-    return await this.resultService.getbyname(name)
+  @Get('getbyid/:id')
+  async getbyname(@Param('id') id: string) {
+    return await this.resultService.getbyID(id)
   }
 }

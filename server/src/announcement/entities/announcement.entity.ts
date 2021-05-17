@@ -10,12 +10,17 @@ export class Announcement {
     createAnnouncementDto: CreateAnnouncementDto,
     author: string,
   ) {
+    const ideaname = (
+      await db.any('SELECT ideaname FROM ideas WHERE id=${id};', {
+        id: createAnnouncementDto.id,
+      })
+    )[0].ideaname
     await db
       .any(
         'INSERT INTO announcement (ideaname, username, anname, short_desc, text) VALUES' +
           '(${ideaname}, ${username}, ${anname}, ${short_desc}, ${text});',
         {
-          ideaname: createAnnouncementDto.ideaname,
+          ideaname: ideaname,
           username: author,
           anname: createAnnouncementDto.anname,
           short_desc: createAnnouncementDto.short_desc,
@@ -36,7 +41,11 @@ export class Announcement {
         { anname: createAnnouncementDto.anname, tagname: tag },
       )
     }
-    return true
+    return (
+      await db.any('SELECT id FROM announcement WHERE anname=${anname};', {
+        anname: createAnnouncementDto.anname,
+      })
+    )[0].id
   }
 
   // all comments for all announcement for idea
@@ -89,6 +98,14 @@ export class Announcement {
         anname: anname,
       })
     )[0]
+  }
+
+  static async namebyid(id: number) {
+    return (
+      await db.any('SELECT anname FROM announcement WHERE id=${id};', {
+        id: id,
+      })
+    )[0].anname
   }
 
   // create new comment

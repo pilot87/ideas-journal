@@ -467,7 +467,7 @@ describe('Idea module', () => {
       })
     ).body.token
 
-    await request(app.getHttpServer())
+    const res0 = await request(app.getHttpServer())
       .post('/api/idea/create')
       .set({ authorization: 'Bearer ' + token1 })
       .send({
@@ -479,7 +479,7 @@ describe('Idea module', () => {
       })
 
     const res = await request(app.getHttpServer())
-      .get('/api/idea/getByName/' + ideaname)
+      .get('/api/idea/getByID/' + res0.body.id)
       .set({ authorization: 'Bearer ' + token0 })
     expect(res.status).toBe(200)
     expect(res.body.message).toEqual('Idea')
@@ -518,7 +518,7 @@ describe('Idea module', () => {
       })
     ).body.token
 
-    await request(app.getHttpServer())
+    const res2 = await request(app.getHttpServer())
       .post('/api/idea/create')
       .set({ authorization: 'Bearer ' + token1 })
       .send({
@@ -529,15 +529,15 @@ describe('Idea module', () => {
         tags: ['Tag0', 'Tag1', 'Tag2'],
       })
 
-    const res = await request(app.getHttpServer())
+    const res1 = await request(app.getHttpServer())
       .post('/api/idea/newcomment')
       .set({ authorization: 'Bearer ' + token0 })
       .send({ ideaname: ideaname, text: 'Some comment' })
-    expect(res.status).toBe(201)
-    expect(res.body.message).toEqual('Comment created')
+    expect(res1.status).toBe(201)
+    expect(res1.body.message).toEqual('Comment created')
 
     const res0 = await request(app.getHttpServer())
-      .get('/api/idea/getByName/' + ideaname)
+      .get('/api/idea/getByID/' + res2.body.id)
       .set({ authorization: 'Bearer ' + token0 })
     expect(res0.status).toBe(200)
     expect(res0.body.message).toEqual('Idea')
@@ -694,7 +694,7 @@ describe('Announcement module', () => {
   })
 
   it('should return announcement by name', async () => {
-    await request(app.getHttpServer())
+    const res0 = await request(app.getHttpServer())
       .post('/api/announcement/create')
       .set({ authorization: 'Bearer ' + tokenf })
       .send({
@@ -709,12 +709,12 @@ describe('Announcement module', () => {
       .post('/api/announcement/createcomment')
       .set({ authorization: 'Bearer ' + tokenc })
       .send({ anname: anname, text: 'Some comment' })
-    const res = await request(app.getHttpServer())
-      .get('/api/announcement/getbyname/' + anname)
+    const res1 = await request(app.getHttpServer())
+      .get('/api/announcement/getbyid/' + res0.body.id)
       .set({ authorization: 'Bearer ' + tokenf })
-    expect(res.status).toBe(200)
-    expect(res.body.message).toBe('Announcement')
-    expect(res.body.an).toEqual({
+    expect(res1.status).toBe(200)
+    expect(res1.body.message).toBe('Announcement')
+    expect(res1.body.an).toEqual({
       ideaname: ideaname,
       username: freelancer,
       anname: anname,
@@ -723,6 +723,7 @@ describe('Announcement module', () => {
       status: 'new',
       tags: ['Tag2', 'Tag3'],
       comments: [{ text: 'Some comment', author: customer }],
+      id: res0.body.id,
     })
   })
 
@@ -739,7 +740,7 @@ describe('Announcement module', () => {
         tags: ['Tag0', 'Tag1'],
       })
 
-    await request(app.getHttpServer())
+    const res4 = await request(app.getHttpServer())
       .post('/api/announcement/create')
       .set({ authorization: 'Bearer ' + tokenf })
       .send({
@@ -773,7 +774,7 @@ describe('Announcement module', () => {
       'chosen',
     )
     const res3 = await request(app.getHttpServer())
-      .get('/api/announcement/getbyname/' + anname)
+      .get('/api/announcement/getbyid/' + res4.body.id)
       .set({ authorization: 'Bearer ' + tokenc })
     expect(res3.status).toBe(200)
     expect(res3.body.an.status).toEqual('chosen')

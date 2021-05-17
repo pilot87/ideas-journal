@@ -40,12 +40,12 @@ const App = () => {
         {/*change to something else*/}
         <Route exact path="/" component={LoginPage} />
         <Route exact path="/addidea" component={AddIdeaPage} />
-        <Route path="/addannaoncement/:idea" component={AddAnnouncementPage} />
+        <Route path="/addannaoncement/:id" component={AddAnnouncementPage} />
         <Route exact path="/ideas" component={IdeasPage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/register" component={AddUserPage} />
-        <Route path="/ideafull/:idea" component={ViewIdeaPage} />
+        <Route path="/ideafull/:id" component={ViewIdeaPage} />
       </Switch>
     </Router>
   )

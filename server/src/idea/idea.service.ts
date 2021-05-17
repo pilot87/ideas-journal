@@ -10,8 +10,8 @@ export class IdeaService {
     createIdeaDto.tags = createIdeaDto.tags.filter(
       (v, i, a) => a.indexOf(v) === i,
     )
-    await Ideas.add(createIdeaDto, author)
-    return { message: 'Idea created' }
+    const id = await Ideas.add(createIdeaDto, author)
+    return { message: 'Idea created', id: id }
   }
 
   async listall() {
@@ -46,7 +46,8 @@ export class IdeaService {
     return { message: 'List', list: result }
   }
 
-  async getByName(idea: string) {
+  async getByID(id: string) {
+    const idea = await Ideas.getNameByID(parseInt(id))
     const ilist = await Ideas.getByName(idea)
     if (ilist.length === 0) {
       throw new NegativeException({ message: 'No ideas found' })

@@ -59,9 +59,9 @@ export class AnnouncementController {
     )
   }
 
-  @Get('getbyname/:anname')
-  async getbyname(@Param('anname') anname: string) {
-    return await this.announcementService.getbyname(anname)
+  @Get('getbyid/:id')
+  async getbyID(@Param('id') id: string) {
+    return await this.announcementService.getbyID(id)
   }
 
   @Post('choose')

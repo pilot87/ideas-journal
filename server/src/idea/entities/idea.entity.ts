@@ -31,13 +31,17 @@ export class Ideas {
       )
     }
 
-    return true
+    return (
+      await db.any('SELECT id FROM ideas WHERE ideaname=${ideaname}', {
+        ideaname: createIdeaDto.ideaname,
+      })
+    )[0].id
   }
 
   // return all ideas
   static async list() {
     return await db.any(
-      'SELECT ideaname, username author, short_desc, status FROM ' +
+      'SELECT ideaname, username author, short_desc, status, id FROM ' +
         'ideas ORDER BY author, ideaname',
     )
   }
@@ -66,6 +70,13 @@ export class Ideas {
       { ideaname: ideaname },
     )
   }
+
+  static async getNameByID(id: number) {
+    return (
+      await db.any('SELECT ideaname FROM ideas WHERE id=${id}', { id: id })
+    )[0].ideaname
+  }
+
   static async getIdeaComments(idea: string) {
     return await db.any(
       'SELECT * FROM ' +

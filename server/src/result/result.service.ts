@@ -25,7 +25,8 @@ export class ResultService {
     return { message: 'Result created' }
   }
 
-  async getbyname(name: string) {
+  async getbyID(id: string) {
+    const name = await Ideas.getNameByID(parseInt(id))
     const text = await Result.getbyname(name)
     return {
       message: 'Result',

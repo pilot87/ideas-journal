@@ -1,9 +1,9 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator'
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateAnnouncementDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  ideaname: string
+  id: number
   @IsString()
   @IsNotEmpty()
   anname: string

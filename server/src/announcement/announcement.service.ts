@@ -9,11 +9,12 @@ import { NegativeException } from '../negative.filter'
 @Injectable()
 export class AnnouncementService {
   async create(createAnnouncementDto: CreateAnnouncementDto, author: string) {
-    await Announcement.create(createAnnouncementDto, author)
-    return { message: 'Announcement created' }
+    const id = await Announcement.create(createAnnouncementDto, author)
+    return { message: 'Announcement created', id: id }
   }
 
-  async list(idea: string) {
+  async list(id: string) {
+    const idea = await Ideas.getNameByID(parseInt(id))
     const announcements = await Announcement.list(idea)
     const ideac = await Announcement.listc(idea)
     const ideat = await Announcement.listt(idea)
@@ -35,7 +36,8 @@ export class AnnouncementService {
     return { message: 'Comment created' }
   }
 
-  async getbyname(anname: string) {
+  async getbyID(id: string) {
+    const anname = await Announcement.namebyid(parseInt(id))
     const an = await Announcement.getbyname(anname)
     return {
       message: 'Announcement',

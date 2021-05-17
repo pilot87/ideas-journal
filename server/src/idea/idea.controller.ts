@@ -49,9 +49,9 @@ export class IdeaController {
     return await this.ideaService.listbyuser(name)
   }
 
-  @Get('getbyname/:idea')
-  async getByName(@Param('idea') idea: string) {
-    return await this.ideaService.getByName(idea)
+  @Get('getbyid/:id')
+  async getByID(@Param('id') id: string) {
+    return await this.ideaService.getByID(id)
   }
 
   @Post('newcomment')

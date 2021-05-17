@@ -22,6 +22,7 @@ export class Result {
   }
 
   static async getbyname(name: string) {
+    console.log('ideaname: ', name)
     return (
       await db.any('SELECT comment FROM results WHERE ideaname=${ideaname};', {
         ideaname: name,
