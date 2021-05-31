@@ -7,7 +7,9 @@ import {
   ValidationPipe,
   UseGuards,
   UseFilters,
-  UseInterceptors, Get, Param,
+  UseInterceptors,
+  Get,
+  Param,
 } from '@nestjs/common'
 import { ResultService } from './result.service'
 import { CreateResultDto } from './dto/create-result.dto'

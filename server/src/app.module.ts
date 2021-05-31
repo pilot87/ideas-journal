@@ -16,9 +16,9 @@ import { join } from 'path'
     AnnouncementModule,
     ResultModule,
     ProfileModule,
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname, '..', '..', 'client', 'build'),
-    // }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'client', 'build'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

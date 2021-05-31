@@ -3,7 +3,7 @@ import { CreateResultDto } from './dto/create-result.dto'
 import { Result } from './entities/result.entity'
 import { Ideas } from '../idea/entities/idea.entity'
 import { NegativeException } from '../negative.filter'
-import {Announcement} from "../announcement/entities/announcement.entity";
+import { Announcement } from '../announcement/entities/announcement.entity'
 
 @Injectable()
 export class ResultService {
