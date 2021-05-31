@@ -4,9 +4,19 @@ import ReactDOM from 'react-dom'
 import './index.scss'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import { Helmet } from 'react-helmet'
 
 ReactDOM.render(
   <React.StrictMode>
+    <Helmet>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Forecast trading emulator</title>
+      <base href="/ij/" />
+    </Helmet>
     <App />
   </React.StrictMode>,
   document.getElementById('root'),

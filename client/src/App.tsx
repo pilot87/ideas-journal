@@ -36,7 +36,7 @@ const App = () => {
   }, [])
 
   return (
-    <Router>
+    <Router basename="/ij/">
       <ModalLogin />
       <Container fluid className="min-vh-100">
         <Row>
