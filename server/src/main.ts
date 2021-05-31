@@ -1,3 +1,5 @@
+const http = require('http')
+
 import { NestFactory } from '@nestjs/core'
 const config = require('config')
 const pgp = require('pg-promise')()

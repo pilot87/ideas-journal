@@ -13,6 +13,8 @@ export class CreateAnnouncementDto {
   @IsString()
   @IsNotEmpty()
   text: string
+  @IsString()
+  link: string
   @IsArray()
   @IsString({ each: true })
   tags: string[]

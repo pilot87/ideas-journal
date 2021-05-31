@@ -12,6 +12,9 @@ import { ModalLogin } from './componenst/ModalLogin'
 import { viewIdea } from './features/viewIdea'
 import { ViewIdeaPage } from './pages/viewIdeaPage'
 import { AddAnnouncementPage } from './pages/addAnnouncementPage'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 const updCycle = async () => {
   const sleep = (ms: number) =>
@@ -35,18 +38,31 @@ const App = () => {
   return (
     <Router>
       <ModalLogin />
-      <Menu />
-      <Switch>
-        {/*change to something else*/}
-        <Route exact path="/" component={LoginPage} />
-        <Route exact path="/addidea" component={AddIdeaPage} />
-        <Route path="/addannaoncement/:id" component={AddAnnouncementPage} />
-        <Route exact path="/ideas" component={IdeasPage} />
-        <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/about" component={AboutPage} />
-        <Route exact path="/register" component={AddUserPage} />
-        <Route path="/ideafull/:id" component={ViewIdeaPage} />
-      </Switch>
+      <Container fluid className="min-vh-100">
+        <Row>
+          <Col className="p-0">
+            <Menu />
+          </Col>
+        </Row>
+        <Row>
+          <Col className="p-0">
+            <Switch>
+              {/*change to something else*/}
+              <Route exact path="/" component={LoginPage} />
+              <Route exact path="/addidea" component={AddIdeaPage} />
+              <Route
+                path="/addannaoncement/:id"
+                component={AddAnnouncementPage}
+              />
+              <Route exact path="/ideas" component={IdeasPage} />
+              <Route exact path="/login" component={LoginPage} />
+              <Route exact path="/about" component={AboutPage} />
+              <Route exact path="/register" component={AddUserPage} />
+              <Route path="/ideafull/:id" component={ViewIdeaPage} />
+            </Switch>
+          </Col>
+        </Row>
+      </Container>
     </Router>
   )
 }

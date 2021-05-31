@@ -17,14 +17,15 @@ export class Announcement {
     )[0].ideaname
     await db
       .any(
-        'INSERT INTO announcement (ideaname, username, anname, short_desc, text) VALUES' +
-          '(${ideaname}, ${username}, ${anname}, ${short_desc}, ${text});',
+        'INSERT INTO announcement (ideaname, username, anname, short_desc, text, link) VALUES' +
+          '(${ideaname}, ${username}, ${anname}, ${short_desc}, ${text}, ${link});',
         {
           ideaname: ideaname,
           username: author,
           anname: createAnnouncementDto.anname,
           short_desc: createAnnouncementDto.short_desc,
           text: createAnnouncementDto.text,
+          link: createAnnouncementDto.link,
         },
       )
       .catch((e) => {

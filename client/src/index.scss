@@ -1,5 +1,10 @@
 @import "custom";
 
+#root > .container-fluid {
+  background: linear-gradient(0turn,$secondary,$light);
+  z-index: -1;
+}
+
 .hover {
   cursor: pointer;
 }
