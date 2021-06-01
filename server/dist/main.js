@@ -1,7 +1,10 @@
+#!/usr/bin/env /home/web/.nvm/versions/node/v14.15.4/bin/node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
-const http = require('http');
+const { createServer, IncomingMessage, ServerResponse } = require('http');
+require('http').ServerResponse = ServerResponse;
+require('http').IncomingMessage = IncomingMessage;
 const core_1 = require("@nestjs/core");
 const config = require('config');
 const pgp = require('pg-promise')();

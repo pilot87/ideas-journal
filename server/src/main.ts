@@ -1,4 +1,9 @@
-const http = require('http')
+#!/usr/bin/env /home/web/.nvm/versions/node/v14.15.4/bin/node
+
+const { createServer, IncomingMessage, ServerResponse } = require('http')
+
+require('http').ServerResponse = ServerResponse
+require('http').IncomingMessage = IncomingMessage
 
 import { NestFactory } from '@nestjs/core'
 const config = require('config')
